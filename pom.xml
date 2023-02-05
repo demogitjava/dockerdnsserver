@@ -13,11 +13,16 @@
     </properties>
     
     <dependencies>
-        <dependency>
-            <groupId>com.microsoft.azure</groupId>
-            <artifactId>azure-mgmt-dns</artifactId>
-            <version>1.41.4</version>
-        </dependency>
+    
+
+            <dependency>
+              <groupId>org.apache.camel</groupId>
+              <artifactId>camel-dns-starter</artifactId>
+              <version>3.0.0-RC3</version>
+            
+            </dependency>
+
+
 
     </dependencies>
     
