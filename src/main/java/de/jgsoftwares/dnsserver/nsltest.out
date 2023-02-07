@@ -1,0 +1,90 @@
+www.test.com
+Server:		localhost
+Address:	127.0.0.1#5353
+
+Name:	www.test.com
+Address: 192.168.1.1
+Name:	www.test.com
+Address: 192.168.1.2
+
+test.com
+Server:		localhost
+Address:	127.0.0.1#5353
+
+Name:	test.com
+Address: 192.168.1.2
+
+MX
+Server:		localhost
+Address:	127.0.0.1#5353
+
+test.com	mail exchanger = 10 one.test.com.
+test.com	mail exchanger = 20 two.test.com.
+
+NS
+Server:		localhost
+Address:	127.0.0.1#5353
+
+test.com	nameserver = one.test.com.
+test.com	nameserver = two.test.com.
+
+CNAME
+Server:		localhost
+Address:	127.0.0.1#5353
+
+mail.test.com	canonical name = www.test.com.
+
+PTR
+Server:		localhost
+Address:	127.0.0.1#5353
+
+27.1.168.192.in-addr.arpa	name = www.test.com.
+
+AAAA
+Server:		localhost
+Address:	127.0.0.1#5353
+
+www.test.com	has AAAA address fedc:ba98:7654:3210:fedc:ba98:7654:3210
+www.test.com	has AAAA address 1080::8:800:200c:417a
+www.test.com	has AAAA address 1080::8:800:200c:417a
+www.test.com	has AAAA address ff01::43
+www.test.com	has AAAA address ::1
+www.test.com	has AAAA address ::13.1.68.3
+www.test.com	has AAAA address ::ffff:129.144.52.38
+www.test.com	has AAAA address ::13.1.68.3
+www.test.com	has AAAA address ::ffff:129.144.52.38
+
+TCP
+Server:		localhost
+Address:	127.0.0.1#5353
+
+Name:	www.test.com
+Address: 192.168.1.1
+Name:	www.test.com
+Address: 192.168.1.2
+
+truncation
+Server:		localhost
+Address:	127.0.0.1#5353
+
+** server can't find test.trunc.org: NXDOMAIN
+
+TXT
+Server:		localhost
+Address:	127.0.0.1#5353
+
+one.test.com	text = "this is a test"
+
+SOA
+Server:		localhost
+Address:	127.0.0.1#5353
+
+test.com
+	origin = test.com
+	mail addr = root.one.test.com
+	serial = 11
+	refresh = 28800
+	retry = 7200
+	expire = 604800
+	minimum = 86400
+

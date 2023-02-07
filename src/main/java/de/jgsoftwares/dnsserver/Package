@@ -1,0 +1,4 @@
+javac *.java
+jar -cvmf MainClass ../bin/JDNSS.jar *.class
+rm *.class
+jar -cvfM ../bin/JDNSS.src.jar `ls -1 | grep -v CVS`
