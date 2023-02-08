@@ -156,6 +156,11 @@ class JDNSS {
     public static void main(String[] args) throws UnsupportedEncodingException, ClassNotFoundException {
         // i'm not sure of a better way to do this. i want command-line options to overwrite
         // the defaults.
+        
+      
+        de.jgsoftwares.dnsserver.startH2Server starth2 = new de.jgsoftwares.dnsserver.startH2Server();
+        starth2.startH2Server();
+        
         for (String arg: args) {
             if (arg.startsWith("-IPaddresses") || arg.startsWith("--IPaddresses")) {
                 jargs.IPaddresses = null;
