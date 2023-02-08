@@ -19,11 +19,18 @@ class DBConnection {
     // com.mysql.jdbc.Driver
     // jdbc:mysql://localhost/JDNSS
     DBConnection(final String dbClass, final String dbURL, final String dbUser,
-                 final String dbPass) throws ClassNotFoundException {
-        this.dbUser = dbUser == null ? "" : dbUser;
-        this.dbPass = dbPass == null ? "" : dbPass;
-        this.dbURL = dbURL;
+                 final String dbPass) throws ClassNotFoundException 
+    {
+        
+        
+        //this.dbUser = dbUser == null ? "" : dbUser;
+        //this.dbPass = dbPass == null ? "" : dbPass;
+        //this.dbURL = dbURL;
 
+        this.dbUser = "admin";
+        this.dbPass = "jj78mvpr52k1";
+        this.dbURL = "jdbc:h2:tcp://localhost:9092/~/shopdb;AUTO_SERVER=true";
+        
         Class.forName(dbClass);
     }
 
