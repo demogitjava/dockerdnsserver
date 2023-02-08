@@ -1,113 +1,193 @@
 package de.jgsoftwares.dnsserver;
 
-import java.net.*;
+import edu.msudenver.cs.jclo.JCLO;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
+import org.apache.logging.log4j.message.ObjectMessage;
+
 import java.io.*;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
-/**
- * The main driver for JDNSS 
- *
- * @author Steve Beaty 
- * @version $Id: JDNSS.java,v 1.6 2004/07/22 05:11:16 drb80 Exp $
- */
+import java.util.concurrent.ThreadLocalRandom;
 
-public class JDNSS
-{   
-    private static Hashtable Zones;
-    private static int port = 53;
-    private static int threads = 10;
-    private static String version = "1.0";
+class JDNSS {
+    // a few AOP singletons
+    static final jdnssArgs jargs = new jdnssArgs();
+    static final Logger logger = LogManager.getLogger("JDNSS");
+    private static DBConnection DBConnection;
 
-    /** 
+    static {
+        ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(true);
+	}
+
+    private static final Map<String, Zone> bindZones = new HashMap<>();
+
+    /**
      * Finds the Zone associated with the domain name passed in
      *
-     * @param name	the name of the domain to find
-     * @return		the associated Zone
+     * @param name the name of the domain to find
+     * @return the associated Zone
      * @see Zone
      */
-    public static Zone getZone (String name)
-    { return ((Zone)Zones.get (name)); }
+    static Zone getZone(String name) {
+        logger.traceEntry(new ObjectMessage(name));
 
-    /** 
-     * Returns the number of threads to allow.
-     *
-     * @return		the number of threads
-     */
-    public static int getThreads() { return (threads); }
+        String longest = Utils.findLongest(bindZones.keySet(), name);
 
-    /** 
-     * Returns the port number to listen to.
-     *
-     * @return		the port number
-     */
-    public static int getPort() { return (port); }
+        if (longest == null) {
+            if (DBConnection != null) {
+                DBZone d = DBConnection.getZone(name);
+                if (d.isEmpty()) {
+                    return new BindZone();
+                }
+                return d;
+            }
+            return new BindZone();
+        }
 
-    /** 
-     * Returns the JDNSS version number
-     *
-     * @return		the version number
-     */
-    public static String getVersion() { return (version); }
+        Zone z = bindZones.getOrDefault(longest, null);
+        if (z == null) {
+            return new BindZone();
+        }
+
+        return z;
+    }
+
+    private static void start() {
+        for (String IPAddress : jargs.IPaddresses) {
+            String[] parts = IPAddress.split("@");
+
+            switch(parts[0]) {
+                case "TCP": case "TLS": new TCP(parts).start(); break;
+                case "UDP": new UDP(parts).start(); break;
+                case "MC": new MC(parts).start(); break;
+                case "HTTPS": new HTTPS(parts); break;
+                default:
+                    logger.error("Invalid IP address specification");
+                    System.exit(-1);
+                    break;
+            }
+        }
+    }
+
+    private static void setLogLevel() {
+        Level level = Level.OFF;
+
+        switch (jargs.logLevel) {
+            case FATAL: level = Level.FATAL; break;
+            case ERROR: level = Level.ERROR; break;
+            case WARN: level = Level.WARN; break;
+            case INFO: level = Level.INFO; break;
+            case DEBUG: level = Level.DEBUG; break;
+            case TRACE: level = Level.TRACE; break;
+            case ALL: level = Level.ALL; break;
+            default:
+                logger.warn("Invalid log level");
+                break;
+        }
+
+        Configurator.setLevel("JDNSS", level);
+    }
+
+    private static void doargs() throws UnsupportedEncodingException, ClassNotFoundException {
+        logger.traceEntry();
+        logger.trace(jargs.toString());
+
+        if (jargs.isVersion()) {
+            System.out.println(new Version().getVersion());
+            System.exit(0);
+        }
+
+        logger.info("Starting JDNSS version " + new Version().getVersion());
+
+        if (jargs.getDBClass() != null && jargs.getDBURL() != null) {
+            DBConnection = new DBConnection(jargs.getDBClass(), jargs.getDBURL(),
+                    jargs.getDBUser(), jargs.getDBPass());
+        }
+
+
+        if (jargs.serverSecret == null){
+            jargs.serverSecret = String.valueOf(ThreadLocalRandom.current().nextLong());
+        }
+
+        if (jargs.serverSecret != null && jargs.serverSecret.length() < 16) {
+            logger.warn("Secret too short, generating random secret instead.");
+            jargs.serverSecret = String.valueOf(ThreadLocalRandom.current().nextLong());
+        }
+
+        String additional[] = jargs.getAdditional();
+        if (additional == null) {
+            return;
+        }
+
+        for (String anAdditional: additional) {
+            try {
+                String name = new File(anAdditional).getName();
+
+                logger.info("Parsing: " + anAdditional);
+
+                if (name.endsWith(".db")) {
+                    name = name.replaceFirst("\\.db$", "");
+                    if (Character.isDigit(name.charAt(0))) {
+                        name = Utils.reverseIP(name);
+                        name = name + ".in-addr.arpa";
+                    }
+                }
+
+                BindZone zone = new BindZone(name);
+                new Parser(new FileInputStream(anAdditional), zone).RRs();
+                logger.trace(zone);
+
+                // the name of the zone can change while parsing, so use
+                // the name from the zone
+                bindZones.put(zone.getName(), zone);
+            } catch (FileNotFoundException e) {
+                logger.warn("Couldn't open file " + anAdditional + '\n' + e);
+            }
+        }
+    }
 
     /**
      * The main driver for the server; creates threads for TCP and UDP.
-     *
-     * @param args	-p #, -t #, -v
      */
-    public static void main(String[] args) // throws IOException
-    {   
-        Zones = new Hashtable();
-
-	/*
-        ** this is a guess; i don't know if this is a good way to implement
-        ** the PTR records, and i don't know if these are good default
-        ** values...
-	*/
-        Zones.put ("in-addr.arpa",
-                new Zone ("in-addr.arpa", "", 1, 28800, 7200, 604800, 86400));
-        Zones.put ("ip6.int",
-                new Zone ("ip6.int", "", 1, 28800, 7200, 604800, 86400));
-
-        for (int i = 0; i < args.length; i++)
-        {
-	    if (args[i].charAt(0) == '-')
-	    {
-		switch (args[i].charAt(1))
-		{
-		    case 'p' : port = Integer.parseInt (args[++i]); break;
-		    case 't' : threads = Integer.parseInt (args[++i]); break;
-		    case 'v' :
-			System.out.println ("JDNSS version " + getVersion());
-			break;
-		    default :
-			System.out.println ("Ignoring flag: " + args[i]);
-			break;
-		}
-		continue;
-	    }
-
-	    try
-	    {
-                String name = new File (args[i]).getName();
-                Parser parse = new Parser (new FileInputStream (args[i]));
-                Zone z = parse.parseIt (name);	// System.out.println (z);
-                Zones.put (name, z);
-	    }
-	    catch (FileNotFoundException e)
-	    {
-		System.err.print ("Couldn't open file " + args[i]);
-		System.err.println (" : " + e);
-	    }
+    public static void main(String[] args) throws UnsupportedEncodingException, ClassNotFoundException {
+        // i'm not sure of a better way to do this. i want command-line options to overwrite
+        // the defaults.
+        for (String arg: args) {
+            if (arg.startsWith("-IPaddresses") || arg.startsWith("--IPaddresses")) {
+                jargs.IPaddresses = null;
+            }
         }
 
-	if (Zones.size() == 2)
-	{
-	    System.err.println ("No zone files");
-	    System.exit (1);
-	}
+        JCLO jclo = new JCLO(jargs);
+        jclo.parse(args);
 
-        new TCP().start();
-        new UDP().start();
-        // new MC().start();
+        if (jargs.isHelp()) {
+            System.out.println(jclo.usage());
+            System.exit(0);
+        }
+
+        Thread.setDefaultUncaughtExceptionHandler(
+                new Thread.UncaughtExceptionHandler() {
+                    @Override public void uncaughtException(Thread t, Throwable e) {
+                        System.err.print("Exception in thread \"" + t.getName());
+                        System.err.println(e.getLocalizedMessage());
+                        System.err.println(e.fillInStackTrace().toString());
+                    }
+                }
+            )
+        ;
+        setLogLevel();
+        doargs();
+
+        if (bindZones.size() == 0 && DBConnection == null) {
+            logger.fatal("No zone files, traceExit.");
+            System.exit(1);
+        }
+
+        start();
     }
 }

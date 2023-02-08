@@ -1,219 +1,140 @@
 package de.jgsoftwares.dnsserver;
 
-/**
- * parses the incoming DNS queries
- * @author Steve Beaty
- * @version $Id: Query.java,v 1.3 2004/09/14 21:23:43 drb80 Exp $
- */
+import lombok.Getter;
+import lombok.ToString;
+import org.apache.logging.log4j.Logger;
 
-import java.util.Vector;
+import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Map;
 
-public class Query extends Header
-{
-    private String name[];
-    private int type[];
-    private int qclass[];
+@ToString
+class Queries {
+    @Getter private final String name;
+    @Getter private final RRCode type;
+    @Getter private final int qclass;
+    @Getter private final boolean QU;
 
-    /**
-     * creates a Query from raw bytes; calls the base class Header to
-     * populate those values.
-     */
-    public Query (byte buf[])
-    {
-        super (buf);
-	// Utils.Assert (! getQR());
-
-        int j = getQuestions();
-        name = new String[j];
-        type = new int[j];
-        qclass = new int[j];
-
-        parseQueries();
+    Queries(final String name, final RRCode type, final int qclass, final boolean QU) {
+        this.name = name;
+        this.type = type;
+        this.qclass = qclass;
+        this.QU = QU;
     }
+}
+
+@ToString
+class Query {
+    private final Logger logger = JDNSS.logger;
+
+    @Getter private final Header header;
+    @Getter private final byte[] buffer;
+    @Getter private Queries[] queries;
+    @Getter private OPTRR optrr;
 
     /**
-     * @param location	current location in the buffer
-     * @param which	which name we're working on
+     * creates a Query from a packet
      */
-    private void uncompress (int start, int location, int which)
-    {
-        // System.out.println ("In uncompress with location = " + location);
-        // System.out.println ("buf[location] = " + Integer.toHexString
-	//	(buf[location]));
-        // System.out.println ("buf[location+1] = " + Integer.toHexString
-	//	(buf[location+1]));
-
-	// the high order bits specify that compression is being used, so
-	// strip them off.
-        int tmp = Utils.addThem ((byte)(buf[location] & 0x3f),
-	    buf[location + 1]);
-        // System.out.println ("tmp = " + tmp);
-
-        // make a recursive call to get the real string
-	Utils.Assert (tmp < start);
-        parseName (tmp, which);
-
-        // System.out.println ("Leaving uncompress, location = " + location);
-    }
-
-    /**
-     * @param start	current offset in the buffer
-     * @param which	which name we're working on
-     * @return		the current location in the buffer 
-     */
-    private int parseName (int start, int which)
-    {
-	int location = start;
-        // System.out.println ("Entering parseName, location = " + location);
-
-        // if the first thing is a compression
-        if ((buf[location] & 0xc0) == 0xc0)
-        {
-            uncompress (start, location, which);
-            return location + 2;
-        }
-
-        int length = buf[location++] & 0x3f;
-
-        while (length > 0)
-        {
-            for (int i = 1; i <= length; i++)
-            {
-                // System.out.println ("Adding" + ((char) buf[location]));
-                name[which] += ((char) buf[location++]);
-            }
-
-            // if we get to the end of a real string and there's a
-            // compression...
-            if ((buf[location] & 0xc0) == 0xc0)
-            {
-                name[which] += ".";
-                uncompress (start, location, which);
-                return location + 2;
-            }
-
-            length = buf[location++] & 0x3f;
-            if (length > 0)
-            {
-                name[which] += ".";
-            }
-        }
-        // System.out.println ("Leaving parseName, location = " + location);
-        return location;
+    Query(byte buffer[]) {
+        this.buffer = buffer;
+        this.header = new Header(buffer);
     }
 
     /**
      * Evaluates and saves all questions
-    */
-    private void parseQueries ()
-    {
-	// the offset of the queries
+     */
+    void parseQueries(String clientIPaddress) {
+        logger.traceEntry();
+
+        /*
+        The question section is used to carry the "question" in most queries,
+        i.e., the parameters that deinfo what is being asked.  The section
+        contains QDCOUNT(usually 1) entries, each of the following format:
+
+        1  1  1  1  1  1
+        0  1  2  3  4  5  6  7  8  9  0  1  2  3  4  5
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |                                               |
+        /                     QNAME                     /
+        /                                               /
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |                     QTYPE                     |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        |                     QCLASS                    |
+        +--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+--+
+        */
+
         int location = 12;
+        queries = new Queries[header.getNumQuestions()];
+        
 
-        for (int i = 0; i < getQuestions(); i++)
-        {
-            name[i] = "";
-            location = parseName (location, i);
-            type[i] = Utils.addThem (buf[location], buf[location + 1]);
-            location += 2;
-            qclass[i] = Utils.addThem (buf[location], buf[location + 1]);
-            location += 2;
+        for (int i = 0; i < header.getNumQuestions(); i++) {
+            Map.Entry<String, Integer> StringAndNumber = Utils.parseName(location, buffer);
+
+            location = StringAndNumber.getValue();
+            int qtype = Utils.addThem(buffer[location++], buffer[location++]);
+            int qclass = Utils.addThem(buffer[location++], buffer[location++]);
+            boolean QU = (qclass & 0xc000) == 0xc000;
+
+            queries[i] = new Queries(StringAndNumber.getKey(),
+                    RRCode.findCode(qtype), qclass, QU);
+
+            /*
+            ** Multicast DNS defines the top bit in the class field of a
+            ** DNS question as the unicast-response bit.  When this bit is
+            ** set in a question, it indicates that the querier is willing
+            ** to accept unicast replies in response to this specific
+            ** query, as well as the usual multicast responses.  These
+            ** questions requesting unicast responses are referred to as
+            ** "QU" questions, to distinguish them from the more usual
+            ** questions requesting multicast responses ("QM" questions).
+            */
+        }
+
+        /* For servers with DNS Cookies enabled, the QUERY opcode behavior is
+        extended to support queries with an empty Question Section (a QDCOUNT
+            of zero (0)), provided that an OPT record is present with a COOKIE
+        option.  Such servers will send a reply that has an empty
+        Answer Section and has a COOKIE option containing the Client Cookie
+        and a valid Server Cookie. */
+
+         /*
+        At a server where DNS Cookies are not implemented and enabled, the
+        presence of a COOKIE option is ignored and the server responds as if
+        no COOKIE option had been included in the request.
+        */
+
+        for (int i = 0; i < header.getNumAdditionals(); i++) {
+            logger.traceEntry();
+
+            // When an OPT RR is included within any DNS message, it
+            // MUST be the only OPT RR in that message.
+            assert header.getNumAdditionals() == 1;
+            this.optrr = new OPTRR(Arrays.copyOfRange(buffer, location, buffer.length));
+
+            //process and transform? optrr for a resonse
+            // need to set the RCODE in header for the response needs to be FORMERR
+            if(optrr.hasFormErr()){
+                header.setRcode( ErrorCodes.FORMERROR.getCode() );
+            }
+
+            if(optrr.isCookie()) {
+                try {
+                    optrr.createServerCookie(clientIPaddress, header);
+                } catch (UnsupportedEncodingException e) {
+                    logger.error(e);
+                }
+            }
         }
     }
 
-    /**
-     * get an array of all the names in this request
-     * @return all the names
-     */
-    public String[] getNames()
-    {
-        return (name);
-    }
-
-    /**
-     * get an array of all the types in this request
-     * @return all the types
-     */
-    public int[] getTypes()
-    {
-        return (type);
-    }
-
-    /**
-     * get an array of all the classes in this request
-     * @return all the classes
-     */
-    public int[] getClasses()
-    {
-        return (qclass);
-    }
-
-    /**
-     * return a rational representation of the type; used in toString()
-     * @return a string representation of the type of request
-     */
-    private String typeString (int i)
-    {
-        switch (i)
-        {
-            case 1 : return "A";
-            case 2 : return "NS";
-            case 3 : return "MD";
-            case 4 : return "MF";
-            case 5 : return "CNAME";
-            case 6 : return "SOA";
-            case 7 : return "MB";
-            case 8 : return "MG";
-            case 9 : return "MR";
-            case 10 : return "NULL";
-            case 11 : return "WKS";
-            case 12 : return "PTR";
-            case 13 : return "HINFO";
-            case 14 : return "MINFO";
-            case 15 : return "MX";
-            case 16 : return "TXT";
-            case 17 : return "RP";
-            case 18 : return "AFSDB";
-            case 20 : return "ISDN";
-            case 21 : return "RT";
-            case 22 : return "NSAP";
-            case 23 : return "NSAP-PTR";
-            case 24 : return "SIG";
-            case 25 : return "KEY";
-            case 26 : return "PX";
-            case 28 : return "AAAA";
-            case 29 : return "LOC";
-            case 30 : return "NXT";
-            case 33 : return "SRV";
-            case 35 : return "NAPTR";
-            case 36 : return "KX";
-            case 37 : return "CERT";
-            case 38 : return "A6";
-            case 42 : return "APL";
-            case 249 : return "TKEY";
-            case 250 : return "TSIG";
-            case 252 : return "AXFR";
-            case 255 : return "ANY";
-            default : return "unknown";
+    byte[] buildResponseQueries() {
+        byte[] questions = new byte[0];
+        for(Queries query: this.getQueries()) {
+            questions = Utils.combine(questions, Utils.convertString(query.getName()));
+            questions = Utils.combine(questions, Utils.getTwoBytes(query.getType().getCode(), 2));
+            questions = Utils.combine(questions, Utils.getTwoBytes(query.getQclass(), 2));
         }
-    }
-
-    /**
-     * create a text representation of the Query, including the information
-     * from the Header base class.
-     * @return a string containing all the contents of this Query
-     */
-    public String toString()
-    {
-        String s = super.toString();
-
-        for (int i = 0; i < getQuestions(); i++)
-        {
-            s += "Name: " + name[i] +
-                 " Number: " + type[i] +
-                 " Class: " + qclass[i] +
-                 " Name: " + typeString (type[i]);
-        }
-        return s;
+        return questions;
     }
 }

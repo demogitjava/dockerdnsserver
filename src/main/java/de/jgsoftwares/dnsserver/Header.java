@@ -1,226 +1,132 @@
 package de.jgsoftwares.dnsserver;
 
-/* Header.java */
-/** 
- * This class models the header for both queries and responses
- *
- * @author Steve Beaty
- * @version $Id: Header.java,v 1.2 2004/07/16 18:27:42 drb80 Exp $
- */
-public class Header
-{   
-   
-    private int id;
-    private int questions;
-    private boolean RD;
-    private int opcode;
+import lombok.*;
+import org.apache.logging.log4j.Logger;
 
-    private int answers;
-    private int authority;
-    private int additional;
-    private int rcode;
-    private boolean TC;
-    private boolean QR;
-    private boolean AA;
-    private boolean RA;
+import java.util.Arrays;
 
-    protected byte buf[];	// fix this
+@ToString
+@EqualsAndHashCode
+class Header {
+    private final Logger logger = JDNSS.logger;
 
-    protected void setAnswers (int a)
-    { if (answers != a) { answers = a; rebuild(); } }
+    private static final int MAXIMUM_VALUE_FOR_TWO_BYTES = 255;
 
-    protected void setAuthority (int a)
-    { if (authority != a) { authority = a; rebuild(); } }
+    private static final int QR_BIT = 0x00008000;
+    private static final int OPCODE_BITS = 0x00007800;
+    private static final int AA_BIT = 0x00000400;
+    private static final int TC_BIT = 0x00000200;
+    private static final int RD_BIT = 0x00000100;
+    private static final int RA_BIT = 0x00000080;
+    private static final int AD_BIT = 0x00000020;
+    private static final int CD_BIT = 0x00000010;
+    private static final int RCODE_BITS = 0x0000000F;
 
-    protected void setAdditional (int a)
-    { if (additional != a) { additional = a; rebuild(); } }
 
-    protected void setRcode (int a)
-    { if (rcode != a) { rcode = a; rebuild(); } }
+    // http://www.networksorcery.com/enp/protocol/dns.htm
+    @Getter private byte[] header = new byte[12];
+    @Getter private final int id;
+    @Getter private final int opcode;
+    @Getter private final int numQuestions;
+    @Getter private int numAnswers;
+    @Getter @Setter(AccessLevel.PACKAGE) private int numAuthorities;
+    @Getter @Setter(AccessLevel.PACKAGE) private int numAdditionals;
+    @Getter @Setter(AccessLevel.PACKAGE) private int rcode;
+    @Getter @Setter(AccessLevel.PACKAGE) private boolean TC; // truncation
+    @Getter @Setter(AccessLevel.PACKAGE) private boolean QR; // query
+    @Getter @Setter(AccessLevel.PACKAGE) private boolean AA; // authoritative answer
+    @Getter @Setter(AccessLevel.PACKAGE) private boolean RA; // recursion available
 
-    protected void setTC () { if (!TC) { TC = true; rebuild(); } }
-    protected void unsetTC () { if (TC) { TC = false; rebuild(); } }
+    @Getter private final boolean RD; // recursion desired
+    @Getter private boolean AD; // authenticated data
+    @Getter private final boolean CD; // checking disabled
 
-    protected void setQR () { if (!QR) { QR = true; rebuild(); } }
-    protected void unsetQR () { if (QR) { QR = false; rebuild(); } }
-
-    protected void setAA () { if (!AA) { AA = true; rebuild(); } }
-    protected void unsetAA () { if (AA) { AA = false; rebuild(); } }
-
-    protected void setRA () { if (!RA) { RA = true; rebuild(); } }
-    protected void unsetRA () { if (RA) { RA = false; rebuild(); } }
-
-    /**
-     * Populates the object data from the byte array of the header
-     * 
-     * @param buf	The byte array from the message
-     * @see		<a href="http://www.faqs.org/rfcs/rfc1035.html">
-     */
-    public Header (byte buf[])
-    {
-        this.buf = buf;
-	setup();
+    void incrementNumAnswers() {
+        numAnswers++;
     }
 
-    /**
-     * Populates the object data from an existing header, usually used to
-     * create a response header from a query.
-     *
-     * @param h		The existing Header
-     */
-    public Header (Header h)
-    {
-	buf = new byte[h.buf.length];
+    void build() {
+        checkValidity();
 
-	System.arraycopy (h.buf, 0, buf, 0, h.buf.length);
-	setup();
+        header[0] = Utils.getByte(id, 2);
+        header[1] = Utils.getByte(id, 1);
+        header[2] = (byte) (
+            (QR ? 128 : 0) |
+            (opcode << 3) |
+            (AA ? 4 : 0) |
+            (TC ? 2 : 0) |
+            (RD ? 1 : 0)
+        );
+        header[3] = (byte) (
+            (RA ? 128 : 0) |
+            (AD ? 32 : 0) |
+            (CD ? 16 : 0) |
+            rcode
+        );
+
+        header[4] = Utils.getByte(numQuestions, 2);
+        header[5] = Utils.getByte(numQuestions, 1);
+        header[6] = Utils.getByte(numAnswers, 2);
+        header[7] = Utils.getByte(numAnswers, 1);
+        header[8] = Utils.getByte(numAuthorities, 2);
+        header[9] = Utils.getByte(numAuthorities, 1);
+        header[10] = Utils.getByte(numAdditionals, 2);
+        header[11] = Utils.getByte(numAdditionals, 1);
     }
 
-    /**
-     * Rebuild the byte array from the object data
-     */
-    private void rebuild()
-    {
-	buf[0] = Utils.getByte (id, 2);
-	buf[1] = Utils.getByte (id, 1);
-        buf[2] = (byte)((QR ? 128 : 0) | (opcode << 3) | (AA ? 4 : 0) | 
-	    (TC ? 2 : 0) | (RD ? 1 : 0));
-        buf[3] = (byte)((RA ? 8 : 0) | rcode);	// put in real rcode
-	buf[4] = Utils.getByte (questions, 2);
-	buf[5] = Utils.getByte (questions, 1);
-	buf[6] = Utils.getByte (answers, 2);
-	buf[7] = Utils.getByte (answers, 1);
-	buf[8] = Utils.getByte (authority, 2);
-	buf[9] = Utils.getByte (authority, 1);
-	buf[10] = Utils.getByte (additional, 2);
-	buf[11] = Utils.getByte (additional, 1);
+    private void checkValidity() {
+        assert opcode == 0;
+
+        boolean good = false;
+        for (ErrorCodes errorCode : ErrorCodes.values()) {
+            if (rcode == errorCode.getCode()) {
+                good = true;
+                break;
+            }
+        }
+        assert good;
+
+        assert numAnswers >= 0 && numAnswers <= MAXIMUM_VALUE_FOR_TWO_BYTES;
+        assert numAuthorities >= 0 && numAuthorities <= MAXIMUM_VALUE_FOR_TWO_BYTES;
+        assert numAdditionals >= 0 && numAdditionals <= MAXIMUM_VALUE_FOR_TWO_BYTES;
+        assert numAdditionals >= 0 && numAdditionals <= MAXIMUM_VALUE_FOR_TWO_BYTES;
     }
 
-    /**
-     * Does the heavy lifting for populating the object's state.  Called by
-     * the constructors.
-     *
-     */
-    private void setup ()
-    {
-        id =		Utils.addThem (buf[0], buf[1]);
-        questions =	Utils.addThem (buf[4], buf[5]);
-        answers =	Utils.addThem (buf[6], buf[7]);
-        authority =	Utils.addThem (buf[8], buf[9]);
-        additional =	Utils.addThem (buf[10], buf[11]);
+    Header(byte buffer[]) {
+        final int HEADER_LENGTH = 12;
+        // only grab the header from the query
+        this.header = Arrays.copyOf(buffer, HEADER_LENGTH);
 
-        int flags =	Utils.addThem (buf[2], buf[3]);
-        QR = (flags & 0x00008000) != 0;
-        opcode = (flags & 0x00007800) >> 11;
-        AA = (flags & 0x00000400) != 0;
-        TC = (flags & 0x00000200) != 0;
-        RD = (flags & 0x00000100) != 0;
-        RA = (flags & 0x00000080) != 0;
-        rcode = flags & 0x0000000f;
-    }
+        id             = Utils.addThem(buffer[0], buffer[1]);
+        numQuestions   = Utils.addThem(buffer[4], buffer[5]);
+        numAnswers     = Utils.addThem(buffer[6], buffer[7]);
+        numAuthorities = Utils.addThem(buffer[8], buffer[9]);
+        numAdditionals = Utils.addThem(buffer[10], buffer[11]);
 
-    /**
-     * Each message has an ID used to map queries to responses.
-     * @return id	the query's identifier
-     */    
-    public int getId () { return id; }
-   
-    /**
-     * How many entries there are in the message's question section.
-     * @return questions	the number of questions
-     */    
-    public int getQuestions () { return questions; }
-   
-    /**
-     * How many resource records there are in the message's answer section.
-     * @return answer	the number of answers
-     */  
-    public int getAnswers () { return answers; }
-    
-    /**
-     * How many name server resource records are in the message's authority
-     * section.
-     * @return authority	the number of authoritative responses
-     */
-    public int getAuthority () { return authority; }
-    
-    /**
-     * How many resource records are in the message's additional records
-     * section.
-     * @return additional	the number of additional records
-     */
-    public int getAdditional () { return additional; }
-    
-    /**
-     * Indicates whether the message is a query or a response.
-     * @return QR	true = query, false = response
-     */
-    public boolean getQR () { return QR; }
-    
-    /**
-     * Indicates whether the response by authoritative name server.
-     * @return AA	true = authoritative
-     */
-    public boolean getAA () { return AA; }
-    
-    /**
-     * Indicates whether the massage has been truncated.
-     * @return TC	true = truncated
-     */
-    public boolean getTC () { return TC; }
-    
-    /**
-     * Indicates whether the querier requests a recursive query.
-     * @return RD	true = recursion desired
-     */
-    public boolean getRD () { return RD; }
-    
-    /**
-     * Indicates whether the name server makes recursive queries available.
-     * @return RA	true = recursion available
-     */
-    public boolean getRA () { return RA; }
-    
-    /**
-     * Indicates the type of request.
-     * @return opcode	0 = standard, 1 = inverse, 2 = server status
-     */
-    public int getOpcode () { return opcode; }
-    
-    /**
-     * Indicates the status of the query.
-     * <pre>
-     * 0 = No error condition.
-     * 1 = Unable to interpret query due to format error.
-     * 2 = Unable to process due to server failure.
-     * 3 = Name in query does not exist.  
-     * 4 = Type of query not supported.  
-     * 5 = Query refused.
-     * </pre>
-     * @return rcode
-     */
-    public int getRcode () { return rcode; }
+        assert numQuestions > 0;
+        assert numAnswers == 0;
+        assert numAuthorities == 0;
 
-   /**
-    * Overrides toString() in java.Object
-    * @return	 A nicely formated description of the header information
-    */
-    public String toString ()
-    {
-        String s = "Id: 0x" + Integer.toHexString (id) + "\n";
-        s += "Questions: " + questions + "\t";
-        s += "Answers: " + answers + "\n";
-        s += "Authority RR's: " + authority + "\t";
-        s += "Additional RR's: " + additional + "\n";
+        int flags = Utils.addThem(buffer[2], buffer[3]);
 
-        s += "QR: " + QR + "\t";
-        s += "AA: " + AA + "\n";
-        s += "TC: " + TC + "\t";
-        s += "RD: " + RD + "\n";
-        s += "RA: " + RA + "\t";
-        s += "opcode: " + opcode + "\n";
-        s += "rcode: " + rcode;
-        return s;
+        QR =      (flags & QR_BIT) != 0;
+        assert ! QR;
+        opcode =  (flags & OPCODE_BITS) >> 11;
+        AA =      (flags & AA_BIT) != 0;
+        assert ! AA;
+        TC =      (flags & TC_BIT) != 0;
+        assert ! TC;
+        RD =      (flags & RD_BIT) != 0;
+        RA =      (flags & RA_BIT) != 0;
+        assert ! RA;
+        AD =      (flags & AD_BIT) != 0;
+        // can't assert because nslookup doesn't set this but dig does
+        // so, we have to unset it
+        AD = false;
+        // TODO: find out why DNSSEC doesn't set AD
+        CD =      (flags & CD_BIT) != 0;
+        rcode =   flags & RCODE_BITS;
+
+        checkValidity();
     }
 }
-

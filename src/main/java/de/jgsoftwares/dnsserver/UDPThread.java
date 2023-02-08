@@ -1,50 +1,49 @@
 package de.jgsoftwares.dnsserver;
 
-import java.net.*;
-import java.io.*;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 
-/**
- * The threads for responding to UDP requests
- *
- * @author Steve Beaty
- * @version $Id: UDPThread.java,v 1.3 2004/09/14 21:23:43 drb80 Exp $
- */
-public class UDPThread extends Thread
+import org.apache.logging.log4j.Logger;
+
+class UDPThread implements Runnable
 {
-    /*
-    ** is responding through the original socket thread safe, or should we
-    ** create another one here?
-    */
-    private DatagramSocket socket;
-    private DatagramPacket packet;
-    // Java can't synchronize around base types.  sigh.
-    private static Object mutex = new Object();
-    private static int count = 0;
+    private final Logger logger = JDNSS.logger;
+
+    private final DatagramSocket socket;
+    private final int port;
+    private final InetAddress address;
+    private final byte[] packet;
 
     /**
      * @param socket	the socket to respond through
      * @param packet	the query
      */
-    public UDPThread (DatagramSocket socket, DatagramPacket packet)
+    public UDPThread(byte[] packet, DatagramSocket socket, int port,
+        InetAddress address)
     {
+        this.packet = packet;
         this.socket = socket;
-	this.packet = packet;
+        this.port = port;
+        this.address = address;
 
-        // System.out.println ("P: count = " + count);
+        /*
+        if (socket instanceof MulticastSocket)
+        {
+            port = 5353;
 
-	// wait here if there are too many threads running
-	synchronized (mutex)
-	{
-	     while (count > JDNSS.getThreads())
-	     {
-                 // System.out.println ("thread blocked: " + getName());
-
-	         try { mutex.wait(); }
-	         catch (Exception e) {}
-	     }
-             // System.out.println ("thread unblocked: " + getName());
-	     count++;
-	}
+            try
+            {
+                address = InetAddress.getByName("224.0.0.251");
+            }
+            catch (UnknownHostException uhe)
+            {
+                logger.catching(uhe);
+                return;
+            }
+        }
+        */
     }
 
     /**
@@ -52,33 +51,29 @@ public class UDPThread extends Thread
      */
     public void run()
     {
-	byte buf[] = new byte[packet.getLength()];
-	System.arraycopy (packet.getData(), 0, buf, 0, buf.length);
+        logger.traceEntry();
 
-	// sleep for 10 secs for testing of threads
-	// System.out.println ("before sleep");
-	// try { Thread.sleep (10000); }
-	// catch (InterruptedException e) { e.printStackTrace(); }
-	// System.out.println ("after sleep");
+        Query query = new Query (packet);
+        query.parseQueries(address.toString());
 
-	Query q = new Query (buf);	// System.out.println (q);
-	Response r = new Response (q);	// System.out.println (r);
-	byte b[] = r.makeResponse(q);
+        Response r = new Response(query, true);
+        byte b[] = r.getBytes();
 
-	if (b != null)
-	{
-	    DatagramPacket reply = new DatagramPacket(b, b.length,
-		packet.getAddress(), packet.getPort());
+        DatagramPacket reply = new DatagramPacket(b, b.length, address, port);
 
-	    try { socket.send(reply); }
-	    catch ( IOException e ) { e.printStackTrace(); }
+        logger.trace("\n" + Utils.toString(reply.getData()));
+        logger.trace(reply.getLength());
+        logger.trace(reply.getOffset());
+        logger.trace(reply.getAddress());
+        logger.trace(reply.getPort());
 
-	    synchronized (mutex)
-	    {
-	        count--;
-                // System.out.println ("V: count = " + count);
-	        if (count > 0) mutex.notify();
-	    }
-	}
+        try
+        {
+            socket.send(reply);
+        }
+        catch (IOException e)
+        {
+            logger.catching(e);
+        }
     }
 }

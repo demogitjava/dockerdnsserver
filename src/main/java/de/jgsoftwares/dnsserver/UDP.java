@@ -1,48 +1,98 @@
 package de.jgsoftwares.dnsserver;
 
-/* UDP.java */
+import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
 import java.net.*;
-import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
- * Receive request packets from a UDP port and create a thread for each
- *
- * @author Steve Beaty
- * @version $Id: UDP.java,v 1.2 2004/09/14 21:23:43 drb80 Exp $
+ * This class is used by UDP and for extended for MC queries.
  */
-public class UDP extends Thread
+class UDP extends Thread
 {
+    DatagramSocket dsocket;
+    final Logger logger = JDNSS.logger;
+
+    UDP() {} // needed for MC subclass
+
+    public UDP(String[] parts) {
+        try {
+            String address = parts[1];
+            int port = Integer.parseInt(parts[2]);
+            dsocket = new DatagramSocket(port, InetAddress.getByName(address));
+        } catch (IOException ioe) {
+            logger.catching(ioe);
+        }
+    }
+
+    /**
+     * This method is used by both UDP and MC
+     */
     public void run()
     {
-        DatagramSocket server = null;
-        
-        try { server = new DatagramSocket(JDNSS.getPort()); }
-        catch ( SocketException e )
-        {
-            e.printStackTrace();
-            System.out.println (getName() + " exiting");
-            return;
-        }
+        logger.traceEntry();
+
+        /*
+        "Multicast DNS Messages carried by UDP may be up to the IP MTU of the
+        physical interface, less the space required for the IP header(20
+        bytes for IPv4; 40 bytes for IPv6) and the UDP header(8 bytes)."
+
+        Ergo, we should probably calculate those values here instead of
+        just going with 1500.
+        */
+
+        int size = this instanceof MC ? 1500 : 512;
+
+        byte[] buffer = new byte[size];
+        DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+        int threadPoolSize = JDNSS.jargs.getThreads();
+        ExecutorService pool = Executors.newFixedThreadPool(threadPoolSize);
 
         while (true)
         {
-            // make a new buffer for each query so this is thread-safe.
-            // remember: arrays are passed by reference...
+            try
+            {
+                dsocket.receive(packet);
+            }
+            catch (IOException ioe)
+            {
+                logger.catching(ioe);
+                continue;
+            }
 
-            byte[] buffer = new byte[512];
-            DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+            Future f = pool.submit(
+                new UDPThread(
+                    Utils.trimByteArray(packet.getData(), packet.getLength()),
+                    dsocket, packet.getPort(), packet.getAddress()
+                )
+            );
 
-            try { server.receive(packet); }
-            catch ( IOException e ) { e.printStackTrace(); }
-            
-            // System.out.println ("----------");
-            // System.out.println ("UDP");
-            // System.out.println ("Packet length = " + packet.getLength());
-            // System.out.println ("From address = " + packet.getAddress());
-            // System.out.println ("From port = " + packet.getPort());
-            // System.out.println ("----------");
+            // if we're only supposed to answer once, and we're the first,
+            // bring everything down with us.
+            if (JDNSS.jargs.isOnce()) {
+                while (!f.isDone()) {
+                    try {
+                        sleep(100);
 
-            new UDPThread (server, packet).start();
+                    } catch (InterruptedException IE) {
+                    }
+                }
+                /*
+                try 
+                {   
+                    f.get();
+                }
+                catch (InterruptedException | ExecutionException ie)
+                {   
+                    logger.catching(ie);
+                }
+                */
+
+                System.exit(0);
+            }
         }
     }
 }
