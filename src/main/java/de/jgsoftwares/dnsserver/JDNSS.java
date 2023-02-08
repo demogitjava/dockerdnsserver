@@ -192,25 +192,10 @@ class JDNSS {
         doargs();
 
         
-        Zone zone = new Zone() {
-            @Override
-            boolean isEmpty() {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
-
-            @Override
-            List<RR> get(RRCode type, String name) {
-                
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
-
-            @Override
-            String getName() {
-                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-            }
-        };
+        DBZone dbzone = new DBZone();
         
-        bindZones.put("1", (Zone) zone.get(RRCode.TXT, "adsfasdfsd"));
+        dbzone.get(RRCode.A, "217.160.255.254");
+        
         if (bindZones.size() == 0 && DBConnection == null) {
             logger.fatal("No zone files, traceExit.");
             System.exit(1);

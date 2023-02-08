@@ -42,7 +42,8 @@ enum RRCode {
 
     private int code;
 
-    RRCode() {
+    RRCode() 
+    {
     }
 
     RRCode(int code) {
