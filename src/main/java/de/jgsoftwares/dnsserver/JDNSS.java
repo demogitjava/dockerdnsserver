@@ -9,6 +9,7 @@ import org.apache.logging.log4j.message.ObjectMessage;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -32,7 +33,9 @@ class JDNSS {
      * @return the associated Zone
      * @see Zone
      */
-    static Zone getZone(String name) {
+    static Zone getZone(String name)
+    {
+        
         logger.traceEntry(new ObjectMessage(name));
 
         String longest = Utils.findLongest(bindZones.keySet(), name);
@@ -188,6 +191,26 @@ class JDNSS {
         setLogLevel();
         doargs();
 
+        
+        Zone zone = new Zone() {
+            @Override
+            boolean isEmpty() {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            @Override
+            List<RR> get(RRCode type, String name) {
+                
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            @Override
+            String getName() {
+                throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+        };
+        
+        bindZones.put("1", (Zone) zone.get(RRCode.TXT, "adsfasdfsd"));
         if (bindZones.size() == 0 && DBConnection == null) {
             logger.fatal("No zone files, traceExit.");
             System.exit(1);
