@@ -6,6 +6,8 @@ import org.apache.logging.log4j.message.ObjectMessage;
 import java.sql.*;
 import java.util.*;
 
+
+import org.h2.tools.Server;
 class DBConnection {
     private Connection conn;
     private Statement stmt;
@@ -23,6 +25,28 @@ class DBConnection {
         this.dbURL = dbURL;
 
         Class.forName(dbClass);
+    }
+
+    
+     // start h2 database server
+    private static void startH2Server()
+    {
+        try
+        {
+            org.h2.tools.Server h2Server = Server.createTcpServer("-tcpPort", "9092", "-tcpAllowOthers").start();
+            //org.h2.tools.Server h2Server = Server.createTcpServer().start();
+            if (h2Server.isRunning(true))
+            {
+                System.out.print("H2 server was started and is running." + "\n");
+            } else
+            {
+                h2Server = Server.createTcpServer().start();
+                throw new RuntimeException("Could not start H2 server." + "\n");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to start H2 server: " + e + "\n");
+        }
+
     }
 
     private Set<String> getDomains(Statement stmt) {
