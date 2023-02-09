@@ -1,3 +1,3 @@
-Simple Java DNS Server 
-form orginal form 
-https://sourceforge.net/projects/jdnss/files/jdnss/1.6.0/
+Simple Interface in Java for 
+Bind9 Server to add DNS Records over
+Rest or the GUIServerPanel via epel-release
