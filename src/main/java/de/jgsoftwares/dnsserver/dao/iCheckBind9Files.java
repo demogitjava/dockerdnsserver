@@ -4,10 +4,10 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
-/**
- *
- * @author root
- */
-public interface iCheckBind9Files {
+
+/*
     
+*/
+public interface iCheckBind9Files {
+    void checkFiles();
 }

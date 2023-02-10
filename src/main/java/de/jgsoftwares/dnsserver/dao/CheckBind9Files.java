@@ -4,11 +4,15 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
-/**
- *
- * @author root
- */
+
 public class CheckBind9Files implements iCheckBind9Files
 {
     
+    @Override
+    public void checkFiles()
+    {
+            
+        
+        
+    }
 }
