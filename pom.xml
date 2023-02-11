@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>
+        <spring-boot.run.jvmArguments>-Duser.timezone=GMT</spring-boot.run.jvmArguments>
         <project.build.sourceEncoding>ISO-8859-1</project.build.sourceEncoding>
         <project.reporting.outputEncoding>ISO-8859-1</project.reporting.outputEncoding>
         <java.version>17</java.version>
@@ -162,6 +162,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <goals>

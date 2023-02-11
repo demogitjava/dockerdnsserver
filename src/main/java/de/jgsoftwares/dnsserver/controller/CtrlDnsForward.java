@@ -4,10 +4,7 @@
  */
 package de.jgsoftwares.dnsserver.controller;
 
-/**
- *
- * @author root
- */
+
 public class CtrlDnsForward implements iCtrlDnsForward
 {
     

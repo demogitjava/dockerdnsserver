@@ -4,10 +4,7 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
-/**
- *
- * @author root
- */
+
 public interface iDaoDnsEntry 
 {
     

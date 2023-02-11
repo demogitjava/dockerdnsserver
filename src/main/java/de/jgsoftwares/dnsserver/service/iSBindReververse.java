@@ -4,10 +4,6 @@
  */
 package de.jgsoftwares.dnsserver.service;
 
-/**
- *
- * @author root
- */
 public interface iSBindReververse 
 {
     

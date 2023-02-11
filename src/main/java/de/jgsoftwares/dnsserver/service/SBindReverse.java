@@ -4,10 +4,7 @@
  */
 package de.jgsoftwares.dnsserver.service;
 
-/**
- *
- * @author root
- */
+
 public class SBindReverse implements iSBindReververse {
     
 }

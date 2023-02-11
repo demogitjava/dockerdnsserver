@@ -6,10 +6,7 @@ package de.jgsoftwares.dnsserver.service;
 
 import org.springframework.stereotype.Service;
 
-/**
- *
- * @author root
- */
+
 @Service
 public class SBindForward implements iSBindForward
 {
