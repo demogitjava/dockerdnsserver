@@ -4,7 +4,9 @@
  */
 package de.jgsoftwares.dnsserver.controller;
 
+import org.springframework.stereotype.Controller;
 
+@Controller
 public class CtrlDnsForward implements iCtrlDnsForward
 {
     

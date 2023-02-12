@@ -13,7 +13,7 @@ https://www.docker.com/
 
 The used java jdk is
 https://www.graalvm.org/downloads/
-in this case i use graalvm jdk 17
+in this case i use graalvm jdk 11
 
 
 Simple Interface in Java for 
