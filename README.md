@@ -2,9 +2,7 @@
 Docker DNS Server 
 ============================================================
 
-![image](https://github.com/demogitjava/demodatabase/blob/master/screenshotguiserverpanel.jpg?raw=true)
-
-used operating system in CENTOS Linux7
+used operating system in Debain:11.6
 
 The used IDE is
 Apache NetBeans
@@ -22,4 +20,4 @@ Simple Interface in Java for
 Bind9 Server to add DNS Records over
 Rest or the GUIServerPanel via epel-release
 
-the used docker image is debain:11.6
+
