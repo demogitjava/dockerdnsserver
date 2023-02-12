@@ -2,7 +2,7 @@
 Docker DNS Server 
 ============================================================
 
-used operating system in Debain:11.6
+used operating system in Debain 11.6
 
 The used IDE is
 Apache NetBeans
