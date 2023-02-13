@@ -7,6 +7,7 @@ package de.jgsoftwares.dnsserver.dao;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DaoDnsEntry implements iDaoDnsEntry {
+public class DaoDnsEntry implements iDaoDnsEntry 
+{
     
 }
