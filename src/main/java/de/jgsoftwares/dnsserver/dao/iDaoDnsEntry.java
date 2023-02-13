@@ -27,4 +27,7 @@ public interface iDaoDnsEntry
         /etc/bind/
     */
     public void createnamedconfoptions();
+    
+    public void createnamedconflocal();
+    
 }

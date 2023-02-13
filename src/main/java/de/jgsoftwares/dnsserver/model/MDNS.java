@@ -17,6 +17,17 @@ public class MDNS
     private String forwarddns;
     private String reversedns;
     private String dnszone;
+    
+    private String dnstype;
+
+    public String getDnstype() {
+        return dnstype;
+    }
+
+    public void setDnstype(String dnstype) {
+        this.dnstype = dnstype;
+    }
+    
 
     public int getId() {
         return id;

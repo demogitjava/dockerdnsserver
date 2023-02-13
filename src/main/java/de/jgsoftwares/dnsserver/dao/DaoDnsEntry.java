@@ -44,6 +44,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
         File name 
         named.conf.options
     */
+    @Override
     public void createnamedconfoptions()
     {
        
@@ -80,4 +81,14 @@ public class DaoDnsEntry implements iDaoDnsEntry
 	
         
     }
+    
+    /**
+     *
+     */
+    @Override
+    public void createnamedconflocal()
+    {
+        
+    }
+    
 }
