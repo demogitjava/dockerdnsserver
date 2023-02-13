@@ -4,8 +4,17 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
+import java.util.List;
+import de.jgsoftwares.dnsserver.model.MDNS;
 
 public interface iDaoDnsEntry 
 {
-    
+
+    /**
+     *
+     * all dns entrys
+     * from table DNS
+     * @return 
+     */
+    public List<MDNS> getdnsentrys();
 }
