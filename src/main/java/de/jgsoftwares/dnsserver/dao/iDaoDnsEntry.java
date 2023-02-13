@@ -17,4 +17,14 @@ public interface iDaoDnsEntry
      * @return 
      */
     public List<MDNS> getdnsentrys();
+    
+    
+    /*
+        write file
+        named.conf.options
+    
+        to path
+        /etc/bind/
+    */
+    public void createnamedconfoptions();
 }

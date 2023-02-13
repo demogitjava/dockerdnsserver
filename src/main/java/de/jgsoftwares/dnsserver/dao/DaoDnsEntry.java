@@ -49,9 +49,9 @@ public class DaoDnsEntry implements iDaoDnsEntry
        
         FileWriter fw;
         try {
-              BufferedWriter bw = null;
+            BufferedWriter bw = null;
             
-             File file = new File("/etc/bind/named.conf.options");
+            File file = new File("/etc/bind/named.conf.options");
         
         
             String stoptnamedconf = new String("options {\n" +
