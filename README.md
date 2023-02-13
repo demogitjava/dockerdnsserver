@@ -1,6 +1,6 @@
 
 Docker DNS Server 
-for Debain -> BIND9
+on Debain with BIND9
 ============================================================
 
 used operating system in Debain 11.6
