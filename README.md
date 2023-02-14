@@ -28,6 +28,11 @@ The Docker Container starts with name
 
 and expose port 53
 
+forwarders are set with google
+8.8.8.8
+8.8.4.4
+for edit the public dns look at 
+DaoDnsEntry - createnamedconfoptions()
 
 
 
