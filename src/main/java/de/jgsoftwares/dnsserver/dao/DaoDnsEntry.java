@@ -21,7 +21,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class DaoDnsEntry implements iDaoDnsEntry 
 {
-    
+ 
+    List<MDNS> ldnsentry;
     
     @Autowired
     @Qualifier(value = "defaultJdbcTemplate")
@@ -30,7 +31,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
     @Override
     public List<MDNS> getdnsentrys()
     {
-        List<MDNS> ldnsentry = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
+        ldnsentry = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
 
         return ldnsentry;
     }
@@ -55,6 +56,8 @@ public class DaoDnsEntry implements iDaoDnsEntry
             File file = new File("/etc/bind/named.conf.options");
         
         
+            String stcommend = new String(";namedconfoptions" + "\n" + "\n");
+            
             String stoptnamedconf = new String("options {\n" +
                 "        directory \"/etc/bind\";\n" +
                 "        recursion no;\n" +
@@ -72,7 +75,10 @@ public class DaoDnsEntry implements iDaoDnsEntry
             fw = new FileWriter(file);
             
             bw = new BufferedWriter(fw);
-            bw.write(stoptnamedconf);
+            
+            bw.write (stcommend);  // check that file is gernated 
+                                       // ;namedconfoptions
+            bw.write(stoptnamedconf);  
             
             bw.close();
         } catch (IOException ex) {
@@ -83,11 +89,49 @@ public class DaoDnsEntry implements iDaoDnsEntry
     }
     
     /**
-     *
+     * named.conf.local
      */
     @Override
     public void createnamedconflocal()
     {
+   
+            // get all dns entrys
+            if(ldnsentry == null)
+            {
+                getdnsentrys();
+            }
+            
+            
+            
+        
+        
+            // /etc/bind/named.conf.local
+            FileWriter fw;
+            try {
+            BufferedWriter bw = null;
+            
+            File file = new File("/etc/bind/named.conf.local");
+        
+        
+            String stnamedconflocal = new String(";namedconflocal" + "\n" + "\n");
+            
+            
+            //  writer.append(' ');
+            //
+            String stoptnamedconf = new String("");
+        
+            fw = new FileWriter(file);
+            
+            bw = new BufferedWriter(fw);
+            
+            bw.write (stnamedconflocal);  // check that file is gernated 
+                                              // ;namedconflocal
+            bw.write(stoptnamedconf);  
+            
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(DaoDnsEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
     }
     
