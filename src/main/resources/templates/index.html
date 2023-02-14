@@ -7,20 +7,126 @@
 
 </header>
 <body>
-      <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    
+            
             <div class="container">
-                
-            </div>
-        </nav>
-        <!-- Page content-->
-        <div class="container">
-            <div class="text-center mt-5">
-                
-               
-            </div>
-        </div>
 
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand" href="#">DNS Server Panel</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                      <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                     
+                      <form class="form-inline col-sm-10">
+                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success col-sm-12" type="submit">Search</button>
+                      </form>
+                    </div>
+            </nav>
+                
+                <div class="row">
+                  <div class="col-sm-7">
+                   
+                      <div class="input-group ">
+                          <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1">Forward Root ZONE</span>
+                        </div>
+                          
+                          <div class="row">
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col-sm-6">
+                                         <input type="text" class="form-control" placeholder="forwad dns like 217.160.255.254" aria-label="forwarddns" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col-sm-2">
+                                          <input type="text" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
+                                    </div>
+                                 <button type="button" class="btn btn-primary">add record</button>
+                                  
+                          </div>
+                        
+                      </div>
+                      
+                      <div class="input-group ">
+                          <div class="input-group-prepend">
+                          <span class="input-group-text" id="basic-addon1">Reverse Root ZONE</span>
+                        </div>
+                          
+                          <div class="row">
+                                    <div class="col-sm-4">
+                                        <input type="text" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col-sm-6">
+                                         <input type="text" class="form-control" placeholder="reverse dns like demoexcample.com" aria-label="forwarddns" aria-describedby="basic-addon1">
+                                    </div>
+                                    <div class="col-sm-2">
+                                          <input type="text" class="form-control" placeholder="type CNAME" aria-label="recordtype" aria-describedby="basic-addon1">
+                                    </div>
+                                  <button type="button" class="btn btn-primary">add record</button>
+                          </div>
+                            
+                          
+                      </div>
+                      
+                      
+                  </div>
+                    <div class="col-sm-5">
+                                        <ul class="list-group">
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Zone Names
+                                              <span class="badge badge-primary badge-pill">14</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Forward DNS Records
+                                              <span class="badge badge-primary badge-pill">2</span>
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                              Reverse DNS Records
+                                              <span class="badge badge-primary badge-pill">1</span>
+                                            </li>
+                                        </ul>
+
+
+                  </div>
+                
+                </div>
+                
+                
+                <div class='row'>
+                    <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">ForwardDNS</th>
+                            <th scope="col">ReverseDNS</th>
+                            <th scope="col">DNSZONE</th>
+                            <th scope="col">DNSTYPE</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                              <th scope="row">
+                                  217.160.255.254
+                              </th>
+                            <td></td>
+                            <td>demoexcample.com</td>
+                            <td>A</td>
+                          </tr>
+                          <tr>
+                              <th scope="row">
+                                  
+                              </th>
+                            <td>demoexcample.com</td>
+                            <td>demoexcample.com</td>
+                            <td>PTR</td>
+                          </tr>
+                         
+                        </tbody>
+                      </table>
+                </div> 
+        </div>
       
 
 </body>
