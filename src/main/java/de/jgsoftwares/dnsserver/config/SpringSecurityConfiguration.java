@@ -51,6 +51,11 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http
 				.csrf().disable().cors().and()
 				.authorizeRequests()
+                                .antMatchers(
+
+						"index",
+						"/h2-console/**",
+						"static/**").permitAll()
 				.antMatchers("index").access("hasAuthority('ROLE_ADMIN','ROLE_USER')")
                                 .anyRequest().authenticated()
 				.and()
