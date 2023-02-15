@@ -12,21 +12,21 @@ import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static junit.runner.Version.id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DaoDnsEntry implements iDaoDnsEntry 
+public class DaoDnsEntry implements iDaoDnsEntry
 {
  
-    List<MDNS> ldnsentry;
-    
-    @Autowired
-    @Qualifier(value = "defaultJdbcTemplate")
+    List<MDNS> ldnsentry;  
     JdbcTemplate jtm;
+    
     
     @Override
     public List<MDNS> getdnsentrys()
@@ -133,6 +133,37 @@ public class DaoDnsEntry implements iDaoDnsEntry
             Logger.getLogger(DaoDnsEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+    }
+    
+    
+    @Override
+    public void saveforward(MDNS mdns)
+    {
+      
+       
+        
+        Integer dnscount = (Integer) getdnscount();
+       
+        
+       
+        
+       
+        
+        
+       
+        
+        
+
+    }
+    
+    
+    
+    @Override
+    public Integer getdnscount()
+    {
+
+        Integer dnscount = jtm.queryForObject("select count(id) from dns", Integer.class);
+        return dnscount;
     }
     
 }

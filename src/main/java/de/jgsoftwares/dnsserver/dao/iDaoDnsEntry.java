@@ -6,6 +6,9 @@ package de.jgsoftwares.dnsserver.dao;
 
 import java.util.List;
 import de.jgsoftwares.dnsserver.model.MDNS;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 
 public interface iDaoDnsEntry 
 {
@@ -29,5 +32,9 @@ public interface iDaoDnsEntry
     public void createnamedconfoptions();
     
     public void createnamedconflocal();
+    
+    public Integer getdnscount();
+    public void saveforward(MDNS mdns);
+    
     
 }

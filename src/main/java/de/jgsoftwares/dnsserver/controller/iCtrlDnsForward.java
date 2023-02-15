@@ -1,10 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package de.jgsoftwares.dnsserver.controller;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import de.jgsoftwares.dnsserver.model.MDNS;
 
-public interface iCtrlDnsForward {
+public interface iCtrlDnsForward 
+{
     
+    
+    @PostMapping("/forward")
+    void addforwardrecord(MDNS mdns);
 }
