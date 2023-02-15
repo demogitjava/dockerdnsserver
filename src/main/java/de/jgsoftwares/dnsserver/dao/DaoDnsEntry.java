@@ -145,20 +145,10 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public void saveforward(MDNS mdns)
     {
       
-       
+       // Integer dnscount = (Integer) getdnscount();   
         
-        Integer dnscount = (Integer) getdnscount();
-       
-        
-        jpadns.save(mdns);
-        
-       
-        
-        
-       
-        
-        
-
+       jpadns.save(mdns);
+  
     }
     
     
