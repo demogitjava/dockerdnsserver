@@ -20,7 +20,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import de.jgsoftwares.dnsserver.dao.JPADNS;
 
 @Repository
 public class DaoDnsEntry implements iDaoDnsEntry
@@ -29,9 +28,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
     List<MDNS> ldnsentry;  
     JdbcTemplate jtm;
     
-    @Autowired
-    de.jgsoftwares.dnsserver.dao.JPADNS jpadns;
-    
+  
     
     @Override
     public List<MDNS> getdnsentrys()
@@ -145,9 +142,9 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public void saveforward(MDNS mdns)
     {
       
-       // Integer dnscount = (Integer) getdnscount();   
+        Integer dnscount = (Integer) getdnscount();   
         
-       jpadns.save(mdns);
+       
   
     }
     

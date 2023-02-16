@@ -8,6 +8,6 @@ import de.jgsoftwares.dnsserver.dao.DaoDnsEntry;
 
 
 public interface iSBindForward {
-    public DaoDnsEntry getDaoentry();
-    public void setDaoentry(DaoDnsEntry daoentry);
+    DaoDnsEntry getDaoentry();
+    void setDaoentry(DaoDnsEntry daoentry);
 }

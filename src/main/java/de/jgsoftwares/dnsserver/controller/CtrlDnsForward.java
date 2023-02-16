@@ -16,12 +16,14 @@ public class CtrlDnsForward implements iCtrlDnsForward
     
    @Autowired
    iSBindForward ibindforward;
-    
+  
+   MDNS mdns;
+   
     
    @Override
    public void addforwardrecord(MDNS mdns)
    {
-     //  mdns = new MDNS();
+     
        
        ibindforward.getDaoentry().saveforward(mdns);
        
