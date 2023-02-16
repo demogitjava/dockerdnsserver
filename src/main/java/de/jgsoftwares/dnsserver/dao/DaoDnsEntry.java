@@ -26,9 +26,13 @@ public class DaoDnsEntry implements iDaoDnsEntry
 {
  
     List<MDNS> ldnsentry;  
+    
+      // demodb
+    @Autowired
+    @Qualifier(value = "defaultJdbcTemplate")
     JdbcTemplate jtm;
     
-  
+   
     
     @Override
     public List<MDNS> getdnsentrys()
@@ -142,9 +146,36 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public void saveforward(MDNS mdns)
     {
       
-        Integer dnscount = (Integer) getdnscount();   
+       
+       
+
+        Integer dnscount = 0;
+        if(dnscount == 0)
+        {
+             dnscount = Integer.valueOf(1);
+             mdns.setId(dnscount);
+            
+        }
+        else
+        {
+            dnscount = getdnscount() + 1;
+            mdns.setId(dnscount);
+        }
+        
         
        
+        jtm.update("insert into dns " +
+                        "(id, forwarddns, reversedns, dnszone, dnstype) " +
+                        "values (?, ?, ?, ?, ?)",
+                mdns.getId(),
+                mdns.getForwarddns(),
+                mdns.getReversedns(),
+                mdns.getDnszone(),
+                mdns.getDnstype());
+        
+                       
+       
+      
   
     }
     
@@ -154,8 +185,9 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public Integer getdnscount()
     {
 
-        Integer dnscount = jtm.queryForObject("select count(id) from dns", Integer.class);
+        Integer dnscount = jtm.queryForObject("SELECT COUNT(*) from dns", Integer.class);
         return dnscount;
     }
-    
+
+   
 }
