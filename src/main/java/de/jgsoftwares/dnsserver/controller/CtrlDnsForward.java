@@ -17,8 +17,7 @@ public class CtrlDnsForward implements iCtrlDnsForward
    @Autowired
    iSBindForward ibindforward;
   
-   MDNS mdns;
-   
+  
     
    @Override
    public void addforwardrecord(MDNS mdns)

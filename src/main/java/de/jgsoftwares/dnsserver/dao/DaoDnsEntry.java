@@ -33,8 +33,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
     JdbcTemplate jtm;
     
    
-   
-    
+      
     
     @Override
     public List<MDNS> getdnsentrys()
@@ -184,7 +183,6 @@ public class DaoDnsEntry implements iDaoDnsEntry
     }
     
     
-    
     @Override
     public Integer getdnscount()
     {
@@ -193,5 +191,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
         return dnscount;
     }
 
-   
+    
+    
+    
 }
