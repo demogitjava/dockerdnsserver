@@ -33,7 +33,12 @@ public class DaoDnsEntry implements iDaoDnsEntry
     JdbcTemplate jtm;
     
    
+   
       
+    public DaoDnsEntry()
+    {
+        
+    }
     
     @Override
     public List<MDNS> getdnsentrys()
@@ -173,15 +178,40 @@ public class DaoDnsEntry implements iDaoDnsEntry
                 mdns.getReversedns(),
                 mdns.getDnszone(),
                 mdns.getDnstype());
-       
-        
- 
-                       
-       
-      
+    
   
     }
     
+    
+    @Override
+    public void savereverse(MDNS mdns)
+    {
+        Integer dnscount = (Integer) getdnscount();
+        if(dnscount == 0)
+        {
+             dnscount = Integer.valueOf(1);
+             mdns.setId(dnscount);
+            
+        }
+        else
+        {
+            dnscount = getdnscount() + 1;
+            mdns.setId(dnscount);
+        }
+        
+        
+       
+        jtm.update("insert into dns " +
+                        "(id, forwarddns, reversedns, dnszone, dnstype) " +
+                        "values (?, ?, ?, ?, ?)",
+                mdns.getId(),
+                mdns.getForwarddns(),
+                mdns.getReversedns(),
+                mdns.getDnszone(),
+                mdns.getDnstype());
+    
+  
+    }
     
     @Override
     public Integer getdnscount()

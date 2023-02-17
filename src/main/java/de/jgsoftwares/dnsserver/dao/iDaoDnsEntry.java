@@ -35,6 +35,6 @@ public interface iDaoDnsEntry
     
     public Integer getdnscount();
     public void saveforward(MDNS mdns);
-    
+    public void savereverse(MDNS mdns);
     
 }

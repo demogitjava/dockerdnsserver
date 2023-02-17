@@ -70,18 +70,25 @@
                           <span class="input-group-text" id="basic-addon1">Reverse Root ZONE</span>
                         </div>
                           
-                          <div class="row">
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="col-sm-6">
-                                         <input type="text" class="form-control" placeholder="reverse dns like demoexcample.com" aria-label="forwarddns" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="col-sm-2">
-                                          <input type="text" class="form-control" placeholder="type CNAME" aria-label="recordtype" aria-describedby="basic-addon1">
-                                    </div>
-                                  <button type="button" class="btn btn-primary">add record</button>
-                          </div>
+                           <form role="form" id="reused_form" th:action="@{/reverse}" method="post"> 			
+                                                    <div class="input-group mb-3">
+                                                          <div class="col-sm-4">
+                                                                     <input type="text" id="dnszone" name="dnszone" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
+                                                                </div>
+                                                                <div class="col-sm-6">
+                                                                     <input type="text" id="reversedns" name="reversedns" class="form-control" placeholder="reverse dns name" aria-label="forwarddns" aria-describedby="basic-addon1">
+                                                                </div>
+                                                                <div class="col-sm-2">
+                                                                      <input type="text" id="dnstype" name="dnstype" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
+                                                                </div>
+
+                                                                <div class="input-group-prepend">
+                                                                       <button type="submit" class="btn btn-primary btn-lg">Send</button>
+                                                                </div>
+
+                                                    </div>
+
+                                    </form>
                             
                           
                       </div>

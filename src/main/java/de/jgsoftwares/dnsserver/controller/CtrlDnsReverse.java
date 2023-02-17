@@ -4,10 +4,26 @@
  */
 package de.jgsoftwares.dnsserver.controller;
 
+import de.jgsoftwares.dnsserver.model.MDNS;
 import org.springframework.stereotype.Controller;
+
+import de.jgsoftwares.dnsserver.service.SBindReverse;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
 public class CtrlDnsReverse implements iCtrlDnsReverse
 {
+    @Autowired
+    SBindReverse ibindreverse;
+    
+    /**
+     *
+     * @param mdns
+     */
+    @Override
+   public void addreverserecord(MDNS mdns)
+   {   
+       ibindreverse.getDaoentry().savereverse(mdns);
+   }
     
 }
