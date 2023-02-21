@@ -25,7 +25,7 @@ import org.springframework.stereotype.Repository;
 public class DaoDnsEntry implements iDaoDnsEntry
 {
  
-    List<MDNS> ldnsentry;  
+     
     
       // demodb
     @Autowired
@@ -43,9 +43,17 @@ public class DaoDnsEntry implements iDaoDnsEntry
     @Override
     public List<MDNS> getdnsentrys()
     {
-        ldnsentry = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
-
+        List<MDNS> ldnsentry = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
         return ldnsentry;
+    }
+    
+    
+    @Override
+    public List<MDNS> getforwarddnsentry()
+    {
+        
+        List<MDNS> forwardlistdns = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
+        return forwardlistdns;
     }
     
     
@@ -107,15 +115,24 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public void createnamedconflocal()
     {
    
-            // get all dns entrys
-            if(ldnsentry == null)
-            {
-                getdnsentrys();
-            }
+           List<MDNS> getdnsentry = null;
+           if(getdnsentry == null)
+           {
+                getdnsentry = (List<MDNS>)getforwarddnsentry();
+           }
+           
+          
+            // static wan ip
+            String stindernetip = null;
+            
+            // fqdn of your email server
+            // mail.demogitjava.de
+            String stdomainmailserver = null;
             
             
-            
-        
+            // fqdn of your internet address
+            // demgitjava.de
+            String stdomain = null;
         
             // /etc/bind/named.conf.local
             FileWriter fw;
@@ -127,6 +144,28 @@ public class DaoDnsEntry implements iDaoDnsEntry
         
             String stnamedconflocal = new String(";namedconflocal" + "\n" + "\n");
             
+            String sttl = new String("$TTL  86400   ; default TTL for this zone (this 1 day)" + "\n");  // TTL
+            String storgin = new String("$ORIGIN " + stdomain +"." + "\n");  // base domain name
+            
+           
+            String stsoa = new String(
+                    "@        IN      SOA     " + stdomain + "." + "(" + "\n" +
+                    "                           2019011502" + "\n" + // Serial number
+                    "                               604800" + "\n" + // Refesh
+                    "                                86400" + "\n" + // Retry
+                    "                              2419200" + "\n" + // Expire
+                    "                                86400" + ")" + "\n");
+                 
+            String stnameserver = new String(""
+                    + "         IN      NS          stdoamin" + "." + "\n"); // nameserver
+            
+            String stmailserver = new String("         IN      MX          " + stdomainmailserver + "." + "\n");
+            
+            
+            String starecords = new String(""
+                    + "www      IN      A           " + stindernetip + "\n" +
+                      "         IN      CNAME   " + "    demogitjava.de" + "\n");
+            
             
             //  writer.append(' ');
             //
@@ -135,12 +174,21 @@ public class DaoDnsEntry implements iDaoDnsEntry
             fw = new FileWriter(file);
             
             bw = new BufferedWriter(fw);
-            
+             
             bw.write (stnamedconflocal);  // check that file is gernated 
-                                              // ;namedconflocal
+            bw.write(sttl);
+            bw.write(storgin);// ;namedconflocal
+            bw.write(stsoa);
+            bw.write(stnameserver);
+            bw.write(stmailserver);
+            bw.write(starecords);
+           
+                                              
+                                              
             bw.write(stoptnamedconf);  
             
             bw.close();
+            fw.close();
         } catch (IOException ex) {
             Logger.getLogger(DaoDnsEntry.class.getName()).log(Level.SEVERE, null, ex);
         }

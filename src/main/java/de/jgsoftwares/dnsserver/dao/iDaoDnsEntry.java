@@ -37,4 +37,6 @@ public interface iDaoDnsEntry
     public void saveforward(MDNS mdns);
     public void savereverse(MDNS mdns);
     
+    
+    public List<MDNS> getforwarddnsentry();
 }

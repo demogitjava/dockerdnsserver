@@ -22,4 +22,10 @@ public class CtrlDnsForward implements iCtrlDnsForward
    {   
        ibindforward.getDaoentry().saveforward(mdns);
    }
+   
+    @Override
+    public void createFile()
+    {
+        ibindforward.getDaoentry().createnamedconflocal();
+    }
 }

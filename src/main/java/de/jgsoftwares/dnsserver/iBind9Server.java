@@ -19,7 +19,7 @@ public interface iBind9Server
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of(st_timezones));
         //ZonedDateTime now = ZonedDateTime.now();
 
-        // set up to GMT
+        // set up to UTC
         now.withZoneSameInstant( ZoneId.of("UTC") )
                 .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
         // 1. ZonedDateTime to TimeStamp
@@ -32,6 +32,7 @@ public interface iBind9Server
         System.out.println(timestamp);
         System.out.println(timestamp2);
 
+      
         SpringApplication.run(BIND9Server.class, args);
     }
   
