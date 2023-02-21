@@ -124,15 +124,26 @@ public class DaoDnsEntry implements iDaoDnsEntry
           
             // static wan ip
             String stindernetip = null;
-            
+            if(stindernetip == null)
+            {
+                stindernetip = "127.0.0.1";
+            }
             // fqdn of your email server
             // mail.demogitjava.de
             String stdomainmailserver = null;
+            if(stdomainmailserver == null)
+            {
+                stdomainmailserver = "mail.localhost.de";
+            }
             
             
             // fqdn of your internet address
             // demgitjava.de
             String stdomain = null;
+            if(stdomain == null)
+            {
+                stdomain = "localhost";
+            }
         
             // /etc/bind/named.conf.local
             FileWriter fw;
