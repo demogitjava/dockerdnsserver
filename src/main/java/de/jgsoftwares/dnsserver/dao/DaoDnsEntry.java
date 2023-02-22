@@ -126,12 +126,22 @@ public class DaoDnsEntry implements iDaoDnsEntry
             String stindernetip = null;
             if(stindernetip == null)
             {
+                 stindernetip = getdnsentry.get(0).getForwarddns();
+               
+            }
+            else
+            {
                 stindernetip = "127.0.0.1";
             }
             // fqdn of your email server
             // mail.demogitjava.de
             String stdomainmailserver = null;
             if(stdomainmailserver == null)
+            {
+               
+                 stdomainmailserver = "mail." + getdnsentry.get(0).getDnszone();
+            }
+            else
             {
                 stdomainmailserver = "mail.localhost.de";
             }
@@ -142,15 +152,80 @@ public class DaoDnsEntry implements iDaoDnsEntry
             String stdomain = null;
             if(stdomain == null)
             {
-                stdomain = "localhost";
+              
+                stdomain = (String) getdnsentry.get(0).getDnszone();  // domain name
+            }
+            else
+            {
+                  stdomain = "localhost";
             }
         
-            // /etc/bind/named.conf.local
+            
+            
+            
+            /*
+            
+            
+                create file named.conf.local
+                
+                path /etc/bind
+            
+            
+            */
+               // /etc/bind/named.conf.local
+            File file1 = new File("/etc/bind/named.conf.local");
+            FileWriter fw1;
+             try {
+                BufferedWriter bw1 = null;
+                fw1 = new FileWriter(file1);
+                bw1 = new BufferedWriter(fw1);
+             
+        
+                /*
+                    zone "example.com" {
+      type master;
+      file "/etc/bind/db.example.com";
+      allow-query { any; };
+      allow-transfer { 12.34.56.78; };
+};
+                */
+                        
+                
+                
+                String stzonename = new String("zone " + '"' + stdomain + '"'+ "{" + "\n" +
+                        "type master;" + "\n" +
+                        "file " + '"' + "/etc/bind/" + stdomain + '"' + ";" + "\n" +
+                        "allow-query { none; }" + "\n" +
+                        "allow-tranfer { none; }" + "};");
+                
+                bw1.write(stzonename);
+                bw1.close();
+                fw1.close();
+        } catch (IOException ex) {
+            Logger.getLogger(DaoDnsEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+             
+             
+             /*
+             
+             
+                    create forward 
+                    dns lookup zone 
+                    
+                    from table DNS
+             
+             */
+           
             FileWriter fw;
             try {
             BufferedWriter bw = null;
             
-            File file = new File("/etc/bind/named.conf.local");
+          
+            
+            // db forward name 
+            // like db.demogitjava.de
+            File file = new File("/etc/bind/" + stdomain);
         
         
             String stnamedconflocal = new String(";namedconflocal" + "\n" + "\n");
@@ -168,14 +243,14 @@ public class DaoDnsEntry implements iDaoDnsEntry
                     "                                86400" + ")" + "\n");
                  
             String stnameserver = new String(""
-                    + "         IN      NS          stdoamin" + "." + "\n"); // nameserver
+                    + "         IN      NS          " + stdomain + "." + "\n"); // nameserver
             
             String stmailserver = new String("         IN      MX          " + stdomainmailserver + "." + "\n");
             
             
             String starecords = new String(""
                     + "www      IN      A           " + stindernetip + "\n" +
-                      "         IN      CNAME   " + "    demogitjava.de" + "\n");
+                      "         IN      CNAME   " + "    " + stdomain + "\n");
             
             
             //  writer.append(' ');
