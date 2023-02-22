@@ -36,6 +36,16 @@ DaoDnsEntry - createnamedconfoptions()
 
 
 
+2023_02_22
+
+mirror 1:
+https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=sharing
+
+mirror 2:
+https://www.dropbox.com/s/csoi6uvgfugh3t6/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
+
+
+
 run options
 ============================================================
 
