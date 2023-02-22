@@ -3,14 +3,15 @@ Docker DNS Server
 ============================================================
 
 in the moment is support one entry in table DNS
+//-------------------------------------------------
 ID  	FORWARDDNS  	REVERSEDNS  	DNSZONE  	DNSTYPE  
 1	217.160.255.254	null	demogitjava.de          A
-
+//-------------------------------------------------
 it also create the file 
 named.conf.local 
 
 and the domain file demogitjava.de 
-
+//-------------------------------------------------
 ;namedconflocal
 
 $TTL  86400   ; default TTL for this zone (this 1 day)
@@ -25,17 +26,17 @@ $ORIGIN demogitjava.de.
          IN      MX          mail.demogitjava.de.
 www      IN      A           217.160.255.254
          IN      CNAME       demogitjava.de
-
+//-------------------------------------------------
 
 then restart the container or the server
 with 
-
+//-------------------------------------------------
 sudo systemctl restart bind9
 and
 sudo ufw allow 53/tcp
 
 sudo ufw allow 53/udp
-
+//-------------------------------------------------
 
 
 
