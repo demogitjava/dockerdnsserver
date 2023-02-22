@@ -2,17 +2,16 @@
 Docker DNS Server
 ============================================================
 
-in the moment is support one entry in table DNS
-</br>
-`
-ID  	FORWARDDNS  	REVERSEDNS  	DNSZONE  	DNSTYPE  
-1	217.160.255.254	null	demogitjava.de          A
-`
-</br>
-it also create the file 
-named.conf.local 
+mirror 1:
+https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=sharing
 
-and the domain file demogitjava.de 
+mirror 2:
+https://www.dropbox.com/s/csoi6uvgfugh3t6/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
+
+
+
+
+in the moment is support one entry in table DNS
 </br>
 `
 ;namedconflocal
@@ -29,12 +28,22 @@ $ORIGIN demogitjava.de.
          IN      MX          mail.demogitjava.de.
 www      IN      A           217.160.255.254
          IN      CNAME       demogitjava.de
+
+
+
+
+ID  	FORWARDDNS  	REVERSEDNS  	DNSZONE  	DNSTYPE  
+1	217.160.255.254	null	demogitjava.de          A
 `
-</br>
+
+it also create the file 
+named.conf.local 
+
+and the domain file demogitjava.de 
+
 then restart the container or the server
 with 
-</br>
-`
+
 sudo systemctl restart bind9
 and
 sudo ufw allow 53/tcp
@@ -44,12 +53,6 @@ sudo ufw allow 53/udp
 </br>
 
 
-
-mirror 1:
-https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=sharing
-
-mirror 2:
-https://www.dropbox.com/s/csoi6uvgfugh3t6/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
 
 
 
