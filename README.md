@@ -9,36 +9,9 @@ mirror 2:
 https://www.dropbox.com/s/csoi6uvgfugh3t6/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
 
 
-
-
 in the moment is support one entry in table DNS
-</br>
-`
-;namedconflocal
-
-$TTL  86400   ; default TTL for this zone (this 1 day)
-$ORIGIN demogitjava.de.
-@        IN      SOA     demogitjava.de.(
-                           2019011502
-                               604800
-                                86400
-                              2419200
-                                86400)
-         IN      NS          demogitjava.de.
-         IN      MX          mail.demogitjava.de.
-www      IN      A           217.160.255.254
-         IN      CNAME       demogitjava.de
-
-
-
-
-ID  	FORWARDDNS  	REVERSEDNS  	DNSZONE  	DNSTYPE  
-1	217.160.255.254	null	demogitjava.de          A
-`
-
 it also create the file 
 named.conf.local 
-
 and the domain file demogitjava.de 
 
 then restart the container or the server
@@ -49,9 +22,6 @@ and
 sudo ufw allow 53/tcp
 
 sudo ufw allow 53/udp
-`
-</br>
-
 
 
 
