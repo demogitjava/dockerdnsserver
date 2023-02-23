@@ -41,4 +41,5 @@ public interface iDaoDnsEntry
     public List<MDNS> getforwarddnsentry();
     
     public Long getForwarddnsCount();
+    public Long getReversednsCount();
 }

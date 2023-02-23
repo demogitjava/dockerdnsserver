@@ -31,8 +31,13 @@ public class CtrlIndex implements iCtrlIndex
         // mv.addObject("webtextcomp", iServiceIndex.getDcontroller().getPageLanguageText());
         
       
+        Long forwarddnscount = indexservice.getDaodns().getForwarddnsCount();
         // long.class count forwarddns 
-        mv.addObject("forwarddnscount", indexservice.getDaodns().getForwarddnsCount());
+        mv.addObject("forwarddnscount", forwarddnscount);
+        
+        Long reversednscount = indexservice.getDaodns().getReversednsCount();
+        mv.addObject("reversednscount", reversednscount);
+
         return mv;
     }
 }
