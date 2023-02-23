@@ -4,10 +4,13 @@
  */
 package de.jgsoftwares.dnsserver.service;
 
+import de.jgsoftwares.dnsserver.dao.DaoDnsEntry;
+
 /**
  *
  * @author root
  */
 public interface iSIndex {
-    
+    public DaoDnsEntry getDaodns();
+    public void setDaodns(DaoDnsEntry daodns);
 }

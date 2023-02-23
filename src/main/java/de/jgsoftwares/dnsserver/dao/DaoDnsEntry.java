@@ -57,6 +57,15 @@ public class DaoDnsEntry implements iDaoDnsEntry
     }
     
     
+    @Override
+    public Long getForwarddnsCount()
+    {
+        Long forwardlistdnscount = jtm.queryForObject("select count(dnszone) from dns where forwarddns is not null group by dnszone", Long.class);
+        return forwardlistdnscount;
+        
+    }
+    
+    
     
     /*
         write File to 
