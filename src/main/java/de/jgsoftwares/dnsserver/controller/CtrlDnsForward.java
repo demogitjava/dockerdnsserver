@@ -29,7 +29,7 @@ public class CtrlDnsForward implements iCtrlDnsForward
    
     /**
      *
-     * @param request
+     * @param request  redirect to index.html
      * @param response
      * @return index MVC Controller
      */

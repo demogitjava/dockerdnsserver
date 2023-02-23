@@ -9,8 +9,14 @@ public interface iCtrlIndex
 {
  
     
-    // load default landingpage
-    // de
+    
+
+    /**
+     *
+     * load default landingpage
+     * de
+     * @return 
+     */
     @GetMapping({"/", "index"})
     public ModelAndView index();
     
