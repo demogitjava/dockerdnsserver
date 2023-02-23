@@ -188,8 +188,8 @@ public class DaoDnsEntry implements iDaoDnsEntry
                 String stzonename = new String("zone " + '"' + stdomain + '"'+ "{" + "\n" +
                         "type master;" + "\n" +
                         "file " + '"' + "/etc/bind/" + stdomain + '"' + ";" + "\n" +
-                        "allow-query { none; }" + "\n" +
-                        "allow-tranfer { none; }" + "};");
+                        "allow-query { none; }" + ";" +"\n" +
+                        "allow-tranfer { none; }" + ";"+ "\n"+ "};");
                 
                 bw1.write(stzonename);
                 bw1.close();
