@@ -5,6 +5,8 @@ Docker DNS Server
 ![enter image description here](https://raw.githubusercontent.com/demogitjava/demodatabase/master/dockerdnspanel.png)
 
 
+
+2023-02-24 created snapshot
 mirror 1:
 https://drive.google.com/file/d/1dWhrwNHl6i_OEZeCHfFDg64UmwFxAfMN/view?usp=share_link
 
