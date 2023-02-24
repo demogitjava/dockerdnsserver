@@ -6,10 +6,10 @@ Docker DNS Server
 
 
 mirror 1:
-https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=sharing
+https://drive.google.com/file/d/1dWhrwNHl6i_OEZeCHfFDg64UmwFxAfMN/view?usp=share_link
 
 mirror 2:
-https://www.dropbox.com/s/wig9aefozig7rao/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
+https://www.dropbox.com/s/mxjx5uzskegxhyr/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
 
 created file /etc/bind
 demogitjava.de
