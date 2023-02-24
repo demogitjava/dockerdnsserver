@@ -7,7 +7,7 @@ https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=shari
 
 mirror 2:
 https://www.dropbox.com/s/wig9aefozig7rao/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
-
+ 
 
 in the moment is support one entry in table DNS
 it also create the file 
