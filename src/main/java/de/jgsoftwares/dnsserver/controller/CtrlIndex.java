@@ -21,20 +21,20 @@ public class CtrlIndex implements iCtrlIndex
     ModelAndView mv;
     
     
-    java.util.List<MDNS> forwardlistdnscount;
     
     @Override
     public ModelAndView index() {
         
        
         mv = new ModelAndView("index");
-        // mv.addObject("webtextcomp", iServiceIndex.getDcontroller().getPageLanguageText());
-        
-      
-        Long forwarddnscount = indexservice.getDaodns().getForwarddnsCount();
+       
+       
+
         // long.class count forwarddns 
+        Long forwarddnscount = indexservice.getDaodns().getForwarddnsCount();
         mv.addObject("forwarddnscount", forwarddnscount);
         
+        // long.class count reversedns 
         Long reversednscount = indexservice.getDaodns().getReversednsCount();
         mv.addObject("reversednscount", reversednscount);
 
