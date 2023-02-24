@@ -4,14 +4,13 @@ Docker DNS Server
 
 ![enter image description here](https://raw.githubusercontent.com/demogitjava/demodatabase/master/dockerdnspanel.png)
 
-
-
 2023-02-24 created snapshot
+
 mirror 1:
-https://drive.google.com/file/d/1dWhrwNHl6i_OEZeCHfFDg64UmwFxAfMN/view?usp=share_link
+https://drive.google.com/file/d/1vuvV8gIHtbfynC_ZJGpTXJx7UsMAFtak/view?usp=sharing
 
 mirror 2:
-https://www.dropbox.com/s/mxjx5uzskegxhyr/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
+https://www.dropbox.com/s/wig9aefozig7rao/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
 
 created file /etc/bind
 demogitjava.de
@@ -32,12 +31,12 @@ demogitjava.de
 
 
 in the moment is support one entry in table DNS
-it also create the file named.conf.local 
+it also create the file named.conf.local
 and the domain file demogitjava.de
 
 
 then restart the container or the server
-with 
+with
 
     sudo systemctl restart bind9
     sudo ufw allow 53/tcp
@@ -58,7 +57,7 @@ https://www.graalvm.org/downloads/
 in this case i use graalvm jdk 11
 
 
-Simple Interface in Java for 
+Simple Interface in Java for
 Bind9 Server to add DNS Records over
 Rest or the GUIServerPanel via epel-release
 
@@ -73,7 +72,7 @@ and expose port 53
 forwarders are set with google
 8.8.8.8
 8.8.4.4
-for edit the public dns look at 
+for edit the public dns look at
 DaoDnsEntry - createnamedconfoptions()
 
 
