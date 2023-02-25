@@ -20,7 +20,8 @@ public class CtrlIndex implements iCtrlIndex
     
     ModelAndView mv;
     
-    
+    Long forwarddnscount;
+    Long reversednscount;
     
     @Override
     public ModelAndView index() {
@@ -28,14 +29,18 @@ public class CtrlIndex implements iCtrlIndex
        
         mv = new ModelAndView("index");
        
-       
+        if(forwarddnscount == null)
+        {
+            forwarddnscount = Long.valueOf(0);
+        }
 
         // long.class count forwarddns 
-        Long forwarddnscount = indexservice.getDaodns().getForwarddnsCount();
+        forwarddnscount = indexservice.getDaodns().getForwarddnsCount();
+       
         mv.addObject("forwarddnscount", forwarddnscount);
         
-        // long.class count reversedns 
-        Long reversednscount = indexservice.getDaodns().getReversednsCount();
+     
+        reversednscount = indexservice.getDaodns().getReversednsCount();
         mv.addObject("reversednscount", reversednscount);
 
         return mv;

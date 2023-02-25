@@ -21,7 +21,11 @@ public class CtrlDnsForward implements iCtrlDnsForward
    
    HttpServletRequest request;
     
-   @Override
+    /**
+     *
+     * @param mdns
+     */
+    @Override
    public void addforwardrecord(MDNS mdns)
    {   
        ibindforward.getDaoentry().saveforward(mdns);
