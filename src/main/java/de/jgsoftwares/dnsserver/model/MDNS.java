@@ -1,11 +1,12 @@
 
 package de.jgsoftwares.dnsserver.model;
+import java.io.Serializable;
 import javax.persistence.*;
 
 
 @Entity
 @Table(name = "DNS")
-public class MDNS 
+public class MDNS implements Serializable 
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
