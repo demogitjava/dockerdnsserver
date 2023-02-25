@@ -5,7 +5,7 @@
 package de.jgsoftwares.dnsserver.service;
 
 import de.jgsoftwares.dnsserver.dao.DaoDnsEntry;
-import de.jgsoftwares.dnsserver.dao.iJPADaoDNS;
+
 
 /**
  *
@@ -15,11 +15,5 @@ public interface iSIndex {
     DaoDnsEntry getDaodns();
     void setDaodns(DaoDnsEntry daodns);
     
-    
-    /*
-        Crud Repository 
-        for Table MDNS
-    */
-    iJPADaoDNS getJpacrudao();
-    void setJpacrudao(iJPADaoDNS jpacrudao);
+   
 }
