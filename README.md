@@ -1,8 +1,15 @@
 
 Docker DNS Server
 ============================================================
+for login on demodatabase
+path /h2-console
 
-![enter image description here](https://raw.githubusercontent.com/demogitjava/demodatabase/master/dockerdnspanel.png)
+    username: admin
+    password: jj78mvpr52k1
+
+
+![enter image description here](https://raw.githubusercontent.com/demogitjava/demodatabase/master/dockerdnspanel.png`
+
 
 2023-02-24 created snapshot
 
