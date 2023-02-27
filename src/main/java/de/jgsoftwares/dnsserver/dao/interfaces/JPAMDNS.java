@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * @author hoscho
  */
 @Repository
-public interface JPADemoDB extends JpaRepository<MDNS, Integer>
+public interface JPAMDNS extends JpaRepository<MDNS, Integer>
 {
     
 }
