@@ -43,6 +43,9 @@ public class CtrlIndex implements iCtrlIndex
         reversednscount = indexservice.getDaodns().getReversednsCount();
         mv.addObject("reversednscount", reversednscount);
 
+        
+        mv.addObject("mdnsentrys", indexservice.getDaodns().findAllEntry());
+       
         return mv;
     }
 }

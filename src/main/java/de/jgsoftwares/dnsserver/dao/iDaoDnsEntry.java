@@ -42,4 +42,7 @@ public interface iDaoDnsEntry
     
     public Long getForwarddnsCount();
     public Long getReversednsCount();
+    
+    
+    public List findAllEntry();
 }
