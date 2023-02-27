@@ -4,6 +4,7 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
+import de.jgsoftwares.dnsserver.dao.interfaces.CrudMDNS;
 import de.jgsoftwares.dnsserver.model.MDNS;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,6 +39,8 @@ public class DaoDnsEntry implements iDaoDnsEntry
     @Autowired
     JPAMDNS jpadb;
 
+    @Autowired
+    CrudMDNS crudmdns;
 
       
     public DaoDnsEntry()
@@ -57,7 +60,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public List<MDNS> getforwarddnsentry()
     {
         
-        List<MDNS> forwardlistdns = jtm.query("select * from dns", new BeanPropertyRowMapper(MDNS.class));
+        List<MDNS> forwardlistdns = jtm.query("SELECT * FROM DNS where forwarddns is not null group by dnszone", new BeanPropertyRowMapper(MDNS.class));
         return forwardlistdns;
     }
     

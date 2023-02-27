@@ -7,6 +7,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author hoscho
  */
-public interface JPACrudMDNS extends CrudRepository<MDNS, Integer>
+public interface CrudMDNS extends CrudRepository<MDNS, Integer>
 {   
 }
