@@ -44,6 +44,11 @@ public class CtrlIndex implements iCtrlIndex
         mv.addObject("reversednscount", reversednscount);
 
         
+        
+        /*
+            get all entrys form 
+            table dns in h2 database
+        */
         mv.addObject("mdnsentrys", indexservice.getDaodns().findAllEntry());
        
         return mv;
