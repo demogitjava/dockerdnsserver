@@ -49,6 +49,6 @@ public class CtrlDnsForward implements iCtrlDnsForward
         return "redirect:" + redirectUrl;
     }
     
-    
+  
     
 }

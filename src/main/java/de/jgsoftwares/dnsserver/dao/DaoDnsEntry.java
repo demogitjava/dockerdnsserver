@@ -4,6 +4,7 @@
  */
 package de.jgsoftwares.dnsserver.dao;
 
+import de.jgsoftwares.dnsserver.dao.interfaces.JPADemoDB;
 import de.jgsoftwares.dnsserver.model.MDNS;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,6 +16,7 @@ import java.util.logging.Logger;
 import static junit.runner.Version.id;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,7 +35,10 @@ public class DaoDnsEntry implements iDaoDnsEntry
     JdbcTemplate jtm;
     
    
-   
+    @Autowired
+    JPADemoDB jpadb;
+
+
       
     public DaoDnsEntry()
     {
