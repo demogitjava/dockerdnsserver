@@ -86,7 +86,7 @@ public class DemoDBConfig extends HikariConfig
 
         properties.put("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         return builder.dataSource(dataSource).properties(properties)
-                .packages("de.jgsoftware.landingpage.model").persistenceUnit("DemoDb").build();
+                .packages("de.jgsoftwares.dnsserver.model").persistenceUnit("DemoDb").build();
 
     }
 
