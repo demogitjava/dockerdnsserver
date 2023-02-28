@@ -104,16 +104,16 @@
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                               Forward DNS Records
                                               <span class="badge badge-primary">
-                                                  <p>
-                                                      [[${forwarddnscount}]]
+                                                  <p th:text="${forwarddnscount}">
+                                                      
                                                   </p>
                                               </span>
                                             </li>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                               Reverse DNS Records
                                               <span class="badge badge-primary badge-pill">
-                                                  <p>
-                                                      [[${reversednscount}]]
+                                                  <p th:text="${reversednscount}">
+                                                    
                                                   </p>
                                               </span>
                                             </li>
