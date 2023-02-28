@@ -14,7 +14,7 @@ public interface iCtrlDnsForward
     
     
     @PostMapping("/forward")
-    void addforwardrecord(MDNS mdns);
+    String addforwardrecord(MDNS mdns, HttpServletRequest request, HttpServletResponse response);
     
     
     @GetMapping("/createfile")

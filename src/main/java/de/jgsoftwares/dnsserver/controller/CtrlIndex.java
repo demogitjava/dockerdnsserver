@@ -7,7 +7,10 @@ import de.jgsoftwares.dnsserver.service.iSIndex;
 import org.springframework.web.servlet.ModelAndView;
 
 
-
+/**
+ *
+ * @author hoscho
+ */
 @Controller
 public class CtrlIndex implements iCtrlIndex
 {

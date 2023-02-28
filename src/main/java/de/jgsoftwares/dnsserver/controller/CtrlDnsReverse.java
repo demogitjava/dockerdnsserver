@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package de.jgsoftwares.dnsserver.controller;
 
 import de.jgsoftwares.dnsserver.model.MDNS;
@@ -13,6 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+/**
+ *
+ * @author hoscho
+ */
 @Controller
 public class CtrlDnsReverse implements iCtrlDnsReverse
 {

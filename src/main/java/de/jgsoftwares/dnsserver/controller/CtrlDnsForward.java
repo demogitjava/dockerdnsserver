@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-
+/**
+ *
+ * @author hoscho
+ */
 @Controller
 public class CtrlDnsForward implements iCtrlDnsForward
 {
@@ -21,15 +24,24 @@ public class CtrlDnsForward implements iCtrlDnsForward
    
    HttpServletRequest request;
     
-    /**
-     *
-     * @param mdns
+     /**
+      *
+      * @param mdns
+      * @param request
+      * @param response
+      * @return 
      */
-    @Override
-   public void addforwardrecord(MDNS mdns)
-   {   
+     @Override
+     public String addforwardrecord(MDNS mdns, HttpServletRequest request, HttpServletResponse response)
+     {   
        ibindforward.getDaoentry().saveforward(mdns);
-   }
+       String redirectUrl = request.getPathInfo();
+        if(redirectUrl == null)
+        {
+            redirectUrl = "index";
+        }
+        return "redirect:" + redirectUrl;
+     }
    
     /**
      *
