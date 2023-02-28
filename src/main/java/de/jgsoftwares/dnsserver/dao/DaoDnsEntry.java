@@ -383,9 +383,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
     public List findAllEntry()
     {
         
-        List<MDNS> allentrys = jpadb.findAll();
-    
-        return allentrys;
+        return jpadb.findAll();
     }
     
     
