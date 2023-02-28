@@ -308,9 +308,6 @@ public class DaoDnsEntry implements iDaoDnsEntry
     @Override
     public void saveforward(MDNS mdns)
     {
-      
-       
-      
 
         Integer dnscount = (Integer) getdnscount();
         if(dnscount == 0)
@@ -378,7 +375,10 @@ public class DaoDnsEntry implements iDaoDnsEntry
         return dnscount;
     }
 
-    
+    /**
+     *
+     * @return
+     */
     @Override
     public List findAllEntry()
     {
