@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  dnsserver:
+    image: debian:11.6
+    container_name: dnsdemogitjava
+    ports:
+      - "192.168.178.3:53:53"
+      
+    networks:
+      192.168.178.0:
+        ipv4_address: 192.168.178.3
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      - TZ=Europe/Berlin
+    dns:
+      - 192.168.178.3
+      - 8.8.8.8
+      - 8.8.4.4
+
+
+
+networks:
+  192.168.178.0:
+    external: true
+
