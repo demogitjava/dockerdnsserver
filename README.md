@@ -37,7 +37,7 @@ demogitjava.de
 
 
 
-in the moment is support one entry in table DNS
+in the moment is support **one entry** in table DNS
 it also create the file named.conf.local
 and the domain file demogitjava.de
 
@@ -58,10 +58,13 @@ https://netbeans.apache.org/download/index.html
 
 required is docker on the machine
 https://www.docker.com/
+to install docker on centos
+[https://docs.docker.com/engine/install/centos/](https://docs.docker.com/engine/install/centos/)
+
+
 
 The used java jdk is
-https://www.graalvm.org/downloads/
-in this case i use graalvm jdk 11
+openjdk-11-jre
 
 
 Simple Interface in Java for
@@ -93,6 +96,7 @@ run options docker network
 for bridge network -> 254 Containers
 
 `docker network create --driver=bridge --subnet=192.168.178.0/24 --ip-range=192.168.178.0/24 --gateway=192.168.178.1 192.168.178.0`
+
 
 
 
