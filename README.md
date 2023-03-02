@@ -58,8 +58,11 @@ https://netbeans.apache.org/download/index.html
 
 required is docker on the machine
 https://www.docker.com/
+
 to install docker on centos
 [https://docs.docker.com/engine/install/centos/](https://docs.docker.com/engine/install/centos/)
+manually install 
+https://download.docker.com/linux/centos/
 
 
 
