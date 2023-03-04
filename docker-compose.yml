@@ -3,7 +3,7 @@ services:
 
   dnsserver:
     image: debian:11.6
-    container_name: dnsdemogitjava
+    container_name: dockerdns
     ports:
       - "53:53"
       

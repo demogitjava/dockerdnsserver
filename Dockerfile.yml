@@ -1,7 +1,7 @@
 FROM debian:11.6
 
 #hostname
-ENV HOSTNAME dnsdemogitjava
+ENV HOSTNAME dockerdns
   
 # locale to german
 ENV LANG=de_DE.ISO-8859-1
