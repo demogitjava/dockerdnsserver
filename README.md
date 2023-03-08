@@ -1,3 +1,4 @@
+
 Docker DNS Server
 ============================================================  
 for login on demodatabase  
@@ -19,8 +20,23 @@ https://www.dropbox.com/s/lfrjwdq4bciyv01/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=
 created file /etc/bind  
 demogitjava.de
 
-$TTL  86400    $ORIGIN demogitjava.de.  
-@        IN      SOA     demogitjava.de.( 2019011502 604800 86400 2419200 86400) IN      NS          demogitjava.de. IN      MX          mail.demogitjava.de. www          IN      A           217.160.255.254 IN      CNAME       demogitjava.de
+    ;namedconflocal  
+      
+    $TTL  86400   ; default TTL for this zone (this 1 day)  
+    $ORIGIN demogitjava.  
+    @        IN      SOA     demogitjava.(  
+                               2019011502  
+                                   604800  
+                                    86400  
+                                  2419200  
+                                    86400)  
+             IN      NS          demogitjava.  
+             IN      MX          mail.demogitjava.  
+    		www      IN      A           217.160.255.254  
+             IN      CNAME       demogitjava
+
+
+
 
 
 in the moment is support **one entry** in table DNS  
