@@ -5,7 +5,8 @@ services:
     image: debian:11.6
     container_name: dockerdns
     ports:
-      - "53:53"
+        - "53:53/udp"
+        - "53:53/tcp"
       
     networks:
       192.168.178.0:
@@ -19,8 +20,6 @@ services:
       - 192.168.178.3
       - 8.8.8.8
       - 8.8.4.4
-
-
 
 networks:
   192.168.178.0:
