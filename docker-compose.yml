@@ -5,15 +5,15 @@ services:
     image: debian:11.6
     container_name: dockerdns
     ports:
-        - "53:53/udp"
-        - "53:53/tcp"
-      
-    networks:
-      192.168.178.0:
-        ipv4_address: 192.168.178.3
+        - "127.0.0.1:53:53/udp"
+        - "127.0.0.1:53:53/tcp"
     build:
       context: ./
       dockerfile: Dockerfile
+    networks:
+      192.168.178.0:
+        ipv4_address: 192.168.178.3
+
     environment:
       - TZ=Europe/Berlin
     dns:

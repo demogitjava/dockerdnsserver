@@ -114,7 +114,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
                 "        listen-on port 53 { localhost; 192.168.178.0/24; };\n" +
                 "        allow-recursion { none; };\n" +
                 "        allow-query { localhost; 192.168.178.0/24; };\n" +
-                "        allow-query-cache { any; };\n" +
+                "        allow-query-cache { none; };\n" +
                 "        \n" +
                 "        forwarders {\n" +
                 "                8.8.8.8;\n" +
@@ -263,17 +263,17 @@ public class DaoDnsEntry implements iDaoDnsEntry
                     "                               604800" + "\n" + // Refesh
                     "                                86400" + "\n" + // Retry
                     "                              2419200" + "\n" + // Expire
-                    "                                86400" + ")" + "\n");
+                    "                                86400 " + ")" + "\n");
                  
             String stnameserver = new String(""
-                    + "         IN      NS          " + stdomain + "." + "\n"); // nameserver
+                    + "@         IN      NS          " + stdomain + "." + "\n"); // nameserver
             
-            String stmailserver = new String("         IN      MX          " + stdomainmailserver + "." + "\n");
+            String stmailserver = new String("@        IN      MX          " + stdomainmailserver + "." + "\n");
             
             
             String starecords = new String(""
                     + "www      IN      A           " + stindernetip + "\n" +
-                      "         IN      CNAME   " + "    " + stdomain + "\n");
+                      "@         IN      CNAME   " + "    " + stdomain + "\n");
             
             
             //  writer.append(' ');
@@ -353,6 +353,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             mdns.setId(dnscount);
         }
         
+  
         
        
         jtm.update("insert into dns " +
