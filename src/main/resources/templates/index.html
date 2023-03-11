@@ -8,174 +8,174 @@
 
 </header>
 <body>
-    
-            
-            <div class="container">
-
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                    <a class="navbar-brand" href="#">DNS Server Panel</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                      <span class="navbar-toggler-icon"></span>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent"  method="post">
-                     
-                      <form class="form-inline col-sm-10" th:action="@{/createfile}">
-                       
-                        <button class="btn btn-outline-success col-sm-12" type="submit">create bind dns file</button>
-                      </form>
-                    </div>
-            </nav>
-                
-                <div class="row">
-                  <div class="col-sm-7">
-                   
-                      <div class="input-group ">
-                          <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1">Forward Root ZONE</span>
-                        </div>
-                          
-                          
-                          
-                                    <form role="form" id="reused_form" th:action="@{/forward}" method="post"> 			
-                                                    <div class="input-group mb-3">
-                                                          <div class="col-sm-4">
-                                                                     <input type="text" id="dnszone" name="dnszone" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
-                                                                </div>
-                                                                <div class="col-sm-6">
-                                                                    <input type="text" id="forwarddns" name="forwarddns" class="form-control" placeholder="forward->192.168.178.4 for landingpage" aria-label="forwarddns" aria-describedby="basic-addon1">
-                                                                </div>
-                                                                <div class="col-sm-2">
-                                                                      <input type="text" id="dnstype" name="dnstype" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
-                                                                </div>
-
-                                                                <div class="input-group-prepend">
-                                                                       <button type="submit" class="btn btn-primary btn-lg" href="/">Send</button>
-                                                                </div>
-
-                                                    </div>
-
-                                    </form>
-
-                          
-                          
-                          <div class="row">
-                                
-                          </div>
-                        
-                      </div>
-                      
-                      <div class="input-group ">
-                          <div class="input-group-prepend">
-                          <span class="input-group-text" id="basic-addon1">Reverse Root ZONE</span>
-                        </div>
-                          
-                           <form role="form" id="reused_form" th:action="@{/reverse}" method="post"> 			
-                                                    <div class="input-group mb-3">
-                                                          <div class="col-sm-4">
-                                                                     <input type="text" id="dnszone" name="dnszone" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
-                                                                </div>
-                                                                <div class="col-sm-6">
-                                                                     <input type="text" id="reversedns" name="reversedns" class="form-control" placeholder="reverse dns name" aria-label="forwarddns" aria-describedby="basic-addon1">
-                                                                </div>
-                                                                <div class="col-sm-2">
-                                                                      <input type="text" id="dnstype" name="dnstype" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
-                                                                </div>
-
-                                                                <div class="input-group-prepend">
-                                                                       <button type="submit" class="btn btn-primary btn-lg">Send</button>
-                                                                </div>
-
-                                                    </div>
-
-                                    </form>
-                            
-                          
-                      </div>
-                      
-                    
-                      
-                      
-                  </div>
-                    <div class="col-sm-5">
-                                        <ul class="list-group">
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Zone Names
-                                              <span class="badge badge-primary badge-pill"></span>
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Forward DNS Records
-                                              <span class="badge badge-primary">
-                                                  <p th:text="${forwarddnscount}">
-                                                      
-                                                  </p>
-                                              </span>
-                                            </li>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                              Reverse DNS Records
-                                              <span class="badge badge-primary badge-pill">
-                                                  <p th:text="${reversednscount}">
-                                                    
-                                                  </p>
-                                              </span>
-                                            </li>
-                                        </ul>
 
 
-                    </div>
-                    
-                    
-                   
-                </div>
-                
-                
-                <div class='row'>
-                    
-                    <table class="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">ForwardDNS</th>
-                            <th scope="col">ReverseDNS</th>
-                            <th scope="col">DNSZONE</th>
-                            <th scope="col">DNSTYPE</th>
-                          </tr>
-                        </thead>
-                        
-                        <tbody>
-                          <tr>
-                              <th scope="row">
-                                  217.160.255.254
-                              </th>
-                            <td></td>
-                            <td>demoexcample.com</td>
-                            <td>A</td>
-                          </tr>
-                          <tr>
-                              <th scope="row">
-                                  
-                              </th>
-                            <td>demoexcample.com</td>
-                            <td>demoexcample.com</td>
-                            <td>PTR</td>
-                          </tr>
-                         
-                        </tbody>
-                        
-                    </table>
-                    
-                </div> 
+<div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">DNS Server Panel</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent"  method="post">
+
+            <form class="form-inline col-sm-10" th:action="@{/createfile}">
+
+                <button class="btn btn-outline-success col-sm-12" type="submit">create bind dns file</button>
+            </form>
         </div>
-      
+    </nav>
+
+    <div class="row">
+        <div class="col-sm-7">
+
+            <div class="input-group ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Forward Root ZONE</span>
+                </div>
+
+
+
+                <form role="form" id="reused_form" th:action="@{/forward}" method="post">
+                    <div class="input-group mb-3">
+                        <div class="col-sm-4">
+                            <input type="text" id="dnszone" name="dnszone" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" id="forwarddns" name="forwarddns" class="form-control" placeholder="forward->192.168.178.4 for landingpage" aria-label="forwarddns" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" id="dnstype" name="dnstype" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
+                        </div>
+
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-primary btn-lg" href="/">Send</button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+
+                <div class="row">
+
+                </div>
+
+            </div>
+
+            <div class="input-group ">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Reverse Root ZONE</span>
+                </div>
+
+                <form role="form" id="reused_form" th:action="@{/reverse}" method="post">
+                    <div class="input-group mb-3">
+                        <div class="col-sm-4">
+                            <input type="text" id="dnszone" name="dnszone" class="form-control" placeholder="root zone name" aria-label="rootzone" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="text" id="reversedns" name="reversedns" class="form-control" placeholder="reverse dns name" aria-label="forwarddns" aria-describedby="basic-addon1">
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" id="dnstype" name="dnstype" class="form-control" placeholder="type A" aria-label="recordtype" aria-describedby="basic-addon1">
+                        </div>
+
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-primary btn-lg">Send</button>
+                        </div>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+
+
+
+
+        </div>
+        <div class="col-sm-5">
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Zone Names
+                    <span class="badge badge-primary badge-pill"></span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Forward DNS Records
+                    <span class="badge badge-primary">
+                                                  <p th:text="${forwarddnscount}">
+
+                                                  </p>
+                                              </span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Reverse DNS Records
+                    <span class="badge badge-primary badge-pill">
+                                                  <p th:text="${reversednscount}">
+
+                                                  </p>
+                                              </span>
+                </li>
+            </ul>
+
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class='row'>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">ForwardDNS</th>
+                <th scope="col">ReverseDNS</th>
+                <th scope="col">DNSZONE</th>
+                <th scope="col">DNSTYPE</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <th scope="row">
+                    217.160.255.254
+                </th>
+                <td></td>
+                <td>demoexcample.com</td>
+                <td>A</td>
+            </tr>
+            <tr>
+                <th scope="row">
+
+                </th>
+                <td>demoexcample.com</td>
+                <td>demoexcample.com</td>
+                <td>PTR</td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
 
 </body>
 
-  <!-- Bootstrap core JavaScript -->
-        <script th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
+<!-- Bootstrap core JavaScript -->
+<script th:src="@{/jquery/jquery-3.5.1.min.js}"></script>
 
-        <script th:src="@{/bootstrap/js/bootstrap.bundle.js}"></script>
-        <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-        <!-- Bootstrap core CSS -->
-        <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
-        <link th:href="@{/bootstrap/custom.css}" rel="stylesheet" />
+<script th:src="@{/bootstrap/js/bootstrap.bundle.js}"></script>
+<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Bootstrap core CSS -->
+<link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+<link th:href="@{/bootstrap/custom.css}" rel="stylesheet" />
 
 </html>
