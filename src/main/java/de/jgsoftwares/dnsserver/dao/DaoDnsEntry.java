@@ -60,6 +60,14 @@ public class DaoDnsEntry implements iDaoDnsEntry
         return forwardlistdns;
     }
     
+    @Override 
+    public List<MDNS> getreversednsentry()
+    {
+        List<MDNS> reverselistdns = jtm.query("SELECT * FROM DNS where reversedns is not null group by dnszone", new BeanPropertyRowMapper(MDNS.class));
+        return reverselistdns;
+    }
+    
+    
     
     @Override
     public Long getForwarddnsCount()
@@ -80,6 +88,8 @@ public class DaoDnsEntry implements iDaoDnsEntry
         return forwardlistdnscount;
         
     }
+    
+    
     
     
     
@@ -306,6 +316,42 @@ public class DaoDnsEntry implements iDaoDnsEntry
         
     }
     
+    
+    @Override
+    public void createreversefile()
+    {
+        
+        List<MDNS> reverselist = (List<MDNS>) getreversednsentry();
+    
+        String stfilename = reverselist.get(0).getDnszone();
+        File reversefile = new File("/ect/bind/" + stfilename);
+        
+        
+        FileWriter rfw;
+          try 
+          {
+            BufferedWriter rbw = null;
+            String sttl = new String("$TTL  86400   ; default TTL for this zone (this 1 day)" + "\n");  // TTL
+            
+             String stsoa = new String(
+                    "@        IN      SOA     " + stfilename + "." + "root." + stfilename + ". " + "(" + "\n" +
+                    "                           2019011502" + "\n" + // Serial number
+                    "                               604800" + "\n" + // Refesh
+                    "                                86400" + "\n" + // Retry
+                    "                              2419200" + "\n" + // Expire
+                    "                                86400 " + ")" + "\n");
+             
+               String stnameserver = new String(""
+                    + "@         IN      NS          " + stfilename + "." + "\n"); // nameserver
+               
+                 String stnameserver1 = new String(""
+                    + "100        IN      PTR          " + stfilename + "." + "\n"); // nameserver
+            
+          } catch (Exception e)
+          {
+              System.out.print("Fehler " + e);
+          }
+    }
     
     @Override
     public void saveforward(MDNS mdns)

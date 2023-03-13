@@ -45,4 +45,7 @@ public interface iDaoDnsEntry
     
     
     public List findAllEntry();
+    
+    public void createreversefile();
+    public List<MDNS> getreversednsentry();
 }
