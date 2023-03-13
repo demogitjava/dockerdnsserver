@@ -365,6 +365,12 @@ public class DaoDnsEntry implements iDaoDnsEntry
           }
     }
     
+    
+    /*
+        save forward 
+        entity to table
+        dns
+    */
     @Override
     public void saveforward(MDNS mdns)
     {
