@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import de.jgsoftwares.dnsserver.service.iSIndex;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @author hoscho
  */
 @Controller
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CtrlIndex implements iCtrlIndex
 {
     

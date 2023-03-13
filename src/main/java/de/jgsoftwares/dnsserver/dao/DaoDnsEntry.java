@@ -269,7 +269,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             
            
             String stsoa = new String(
-                    "@        IN      SOA     " + stdomain + "." + "root." + stdomain + ". " + "(" + "\n" +
+                    "@        IN      SOA     " + stdomain + ". " + "root." + stdomain + ". " + "(" + "\n" +
                     "                           2019011502" + "\n" + // Serial number
                     "                               604800" + "\n" + // Refesh
                     "                                86400" + "\n" + // Retry
@@ -277,7 +277,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
                     "                                86400 " + ")" + "\n");
                  
             String stnameserver = new String(""
-                    + "@         IN      NS          " + stdomain + "." + "\n"); // nameserver
+                    + "@        IN      NS          " + stdomain + "." + "\n"); // nameserver
             
             String stmailserver = new String("@        IN      MX          " + stdomainmailserver + "." + "\n");
             
@@ -285,7 +285,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             String starecords = new String(""
                     + "@        IN      A           " + stindernetip + "\n" 
                     + "www      IN      A           " + stindernetip + "\n" +
-                      "@         IN      CNAME   " + "    " + stdomain + "\n");
+                      "@        IN      CNAME   " + "    " + stdomain + "\n");
             
             
             //  writer.append(' ');
