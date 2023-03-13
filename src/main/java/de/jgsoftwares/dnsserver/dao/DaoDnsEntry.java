@@ -241,7 +241,12 @@ public class DaoDnsEntry implements iDaoDnsEntry
             BufferedWriter bw = null;
             
           
+           /*
             
+            
+                FORWARD FILE
+            
+            */
             // db forward name 
             // like db.demogitjava.de
             File file = new File("/etc/bind/" + stdomain);
@@ -254,7 +259,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             
            
             String stsoa = new String(
-                    "@        IN      SOA     " + stdomain + "." + "(" + "\n" +
+                    "@        IN      SOA     " + stdomain + "." + "root." + stdomain + ". " + "(" + "\n" +
                     "                           2019011502" + "\n" + // Serial number
                     "                               604800" + "\n" + // Refesh
                     "                                86400" + "\n" + // Retry
@@ -268,6 +273,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             
             
             String starecords = new String(""
+                    + "@        IN      A           " + stindernetip + "\n" 
                     + "www      IN      A           " + stindernetip + "\n" +
                       "@         IN      CNAME   " + "    " + stdomain + "\n");
             
@@ -297,7 +303,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
         } catch (IOException ex) {
             Logger.getLogger(DaoDnsEntry.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+        
     }
     
     
