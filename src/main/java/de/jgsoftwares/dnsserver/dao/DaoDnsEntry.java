@@ -333,7 +333,7 @@ public class DaoDnsEntry implements iDaoDnsEntry
             BufferedWriter rbw = null;
             String sttl = new String("$TTL  86400   ; default TTL for this zone (this 1 day)" + "\n");  // TTL
             
-             String stsoa = new String(
+            String stsoa = new String(
                     "@        IN      SOA     " + stfilename + "." + "root." + stfilename + ". " + "(" + "\n" +
                     "                           2019011502" + "\n" + // Serial number
                     "                               604800" + "\n" + // Refesh
@@ -347,6 +347,18 @@ public class DaoDnsEntry implements iDaoDnsEntry
                  String stnameserver1 = new String(""
                     + "100        IN      PTR          " + stfilename + "." + "\n"); // nameserver
             
+                 
+            rfw = new FileWriter(reversefile);
+            
+            rbw = new BufferedWriter(rfw);
+            
+            rbw.write(sttl);
+            rbw.write(stsoa);
+            rbw.write(stnameserver);
+            rbw.write(stnameserver1);
+            
+            rbw.close();
+            rfw.close();
           } catch (Exception e)
           {
               System.out.print("Fehler " + e);
