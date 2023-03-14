@@ -1,7 +1,7 @@
 
 Docker DNS Server
 ============================================================  
-for login on demodatabase  
+for login on demodnsserver
 path
 http://192.168.178.3/h2-console
 
