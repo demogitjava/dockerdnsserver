@@ -1,7 +1,7 @@
 
 Docker DNS Server
 ============================================================  
-for login on demodnsserver
+for login on demodatabase  
 path
 http://192.168.178.3/h2-console
 
@@ -21,7 +21,7 @@ https://drive.google.com/file/d/1ww0gId0cHH4eLv3gZ2Q5InvwnAwjndwS/view?usp=shari
 mirror 2:  
 https://www.dropbox.com/s/agcep0wt6qbwfii/dockerdnsserver-0.0.1-SNAPSHOT.jar?dl=0
 
-created file /etc/bind  
+created file /etc/bind
 
 **demogitjava**
 
@@ -95,6 +95,24 @@ edit manuel:
 
 
 
+
+**reservedemogitjava.de**
+
+    $TTL  86400   ; default TTL for this zone (this 1 day)@        IN      SOA     demogitjava.de. root.demogitjava.de. (
+                           2019011502
+                               604800
+                                86400
+                              2419200
+                                86400 )
+     @          IN      NS          demogitjava.de.
+     100        IN      PTR         demogitjava.de.
+
+
+
+
+
+
+
 in the moment is support **one entry** in table DNS  
 it also create the file named.conf.local  
 and the domain file demogitjava.de
@@ -118,7 +136,7 @@ required is docker on the machine
 https://www.docker.com/
 
 to install docker on centos  
-[https://docs.docker.com/engine/install/centos/](https://docs.docker.com/engine/install/centos/)  
+[https://docs.docker.com/engine/install/centos/](https://docs.docker.com/engine/install/centos/)
 
 manually install   
 https://download.docker.com/linux/centos/
@@ -161,3 +179,4 @@ run options docker network
 for bridge network -> 254 Containers
 
 `docker network create --driver=bridge --subnet=192.168.178.0/24 --ip-range=192.168.178.0/24 --gateway=192.168.178.1 192.168.178.0`
+
