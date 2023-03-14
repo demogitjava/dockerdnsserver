@@ -150,6 +150,15 @@ public class DaoDnsEntry implements iDaoDnsEntry
     @Override
     public void createnamedconflocal()
     {
+        
+        /*
+        
+                get forward dns entry 
+                in free version it get´s only one
+                entry
+        
+                the index is -> 0
+        */
    
            List<MDNS> getdnsentry = null;
            if(getdnsentry == null)
@@ -222,12 +231,54 @@ public class DaoDnsEntry implements iDaoDnsEntry
                 
                 
                 String stzonename = new String("zone " + '"' + stdomain + '"'+ " {" + "\n" +
-                        "type master;" + "\n" +
-                        "file " + '"' + "/etc/bind/" + stdomain + '"' + ";" + "\n" +
-                        "allow-query { none; }" + ";" +"\n" +
-                        "allow-tranfer { none; }" + ";"+ "\n"+ "};");
+                        "    " + "type master;" + "\n" +
+                        "    " + "file " + '"' + "/etc/bind/" + stdomain + '"' + ";" + "\n" +
+                        "    " + "allow-query { none; }" + ";" +"\n" +
+                        "    " + "allow-tranfer { none; }" + ";"+ "\n"+ "};");
                 
                 bw1.write(stzonename);
+                
+                
+                String stnewline = new String();
+                bw1.write(stnewline + "\n");
+                bw1.write(stnewline + "\n");
+                
+                
+                /*
+                    get reverse dns entry
+                    only one entry 
+                    
+                    the index is -> 0
+                    by query getreversednsentry();
+                */
+                
+                
+                String reservefilename = null;
+                List<MDNS> resevelist = getreversednsentry();
+                
+                // get name form query
+                reservefilename = resevelist.get(0).getDnszone();
+                File reservefile = new File("/etc/bind/" + "reserve" + reservefilename);
+                
+                     
+                /*
+                    write reverse file data to file 
+                    named.conf.local
+                */
+                String streversezonename = new String("zone " + '"' + "reverse" + reservefilename + '"'+ " {" + "\n" +
+                        "    " + "type master;" + "\n" +
+                        "    " + "file " + '"' + "/etc/bind/" + "reverse" + reservefilename + '"' + ";" + "\n" +
+                        "    " + "allow-query { none; }" + ";" +"\n" +
+                        "    " + "allow-tranfer { none; }" + ";"+ "\n"+ "};");
+                
+                bw1.write(streversezonename);
+                
+                
+                
+                File reservefilebind = new File("/etc/bind/" + "reverse" + reservefilename);
+                createreversefile();
+                 
+                
                 bw1.close();
                 fw1.close();
         } catch (IOException ex) {
@@ -316,6 +367,15 @@ public class DaoDnsEntry implements iDaoDnsEntry
         
     }
     
+    /*
+         File file1 = new File("/etc/bind/named.conf.local");
+            FileWriter fw1;
+             try {
+                BufferedWriter bw1 = null;
+                fw1 = new FileWriter(file1);
+                bw1 = new BufferedWriter(fw1);
+    */
+    
     
     @Override
     public void createreversefile()
@@ -324,17 +384,19 @@ public class DaoDnsEntry implements iDaoDnsEntry
         List<MDNS> reverselist = (List<MDNS>) getreversednsentry();
     
         String stfilename = reverselist.get(0).getDnszone();
-        File reversefile = new File("/ect/bind/" + stfilename);
+        File reversefile = new File("/etc/bind/" + "reserve" + stfilename);
         
         
         FileWriter rfw;
           try 
           {
             BufferedWriter rbw = null;
+            rfw = new FileWriter(reversefile);
+            rbw = new BufferedWriter(rfw);
             String sttl = new String("$TTL  86400   ; default TTL for this zone (this 1 day)" + "\n");  // TTL
             
             String stsoa = new String(
-                    "@        IN      SOA     " + stfilename + "." + "root." + stfilename + ". " + "(" + "\n" +
+                    "@        IN      SOA     " + stfilename + ". " + "root." + stfilename + ". " + "(" + "\n" +
                     "                           2019011502" + "\n" + // Serial number
                     "                               604800" + "\n" + // Refesh
                     "                                86400" + "\n" + // Retry
@@ -342,10 +404,10 @@ public class DaoDnsEntry implements iDaoDnsEntry
                     "                                86400 " + ")" + "\n");
              
                String stnameserver = new String(""
-                    + "@         IN      NS          " + stfilename + "." + "\n"); // nameserver
+                    + "@          IN      NS          " + stfilename + "." + "\n"); // nameserver
                
                  String stnameserver1 = new String(""
-                    + "100        IN      PTR          " + stfilename + "." + "\n"); // nameserver
+                    + "100        IN      PTR         " + stfilename + "." + "\n"); // nameserver
             
                  
             rfw = new FileWriter(reversefile);
