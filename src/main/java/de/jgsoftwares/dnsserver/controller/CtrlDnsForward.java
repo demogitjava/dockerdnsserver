@@ -54,6 +54,7 @@ public class CtrlDnsForward implements iCtrlDnsForward
     {
         ibindforward.getDaoentry().createreversefile(); // create reverse file
         ibindforward.getDaoentry().createnamedconflocal(); // create forward file on path /etc/bind
+        ibindforward.getDaoentry().createnamedconfoptions(); 
         String redirectUrl = request.getPathInfo();
         if(redirectUrl == null)
         {
