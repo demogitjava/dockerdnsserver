@@ -121,7 +121,7 @@ and the domain file demogitjava.de
 then restart the container or the server  
 with
 
-    apt-get install bind8
+    apt-get install bind9
     apt-get install ufw
     ufw allow 53/tcp 
     ufw allow 53/udp

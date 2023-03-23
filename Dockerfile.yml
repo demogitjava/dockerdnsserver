@@ -12,6 +12,7 @@ ENV TZ Europe/Berlin
 
 EXPOSE 53
 EXPOSE 80
+EXPOSE 9092
 
 RUN apt-get update && \
 apt-get install -y --no-install-recommends \
