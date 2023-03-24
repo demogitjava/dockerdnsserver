@@ -1,27 +1,28 @@
-FROM debian:11.6
+#FROM debain:11.6
+FROM centos:8
 
 #hostname
-ENV HOSTNAME dockerdns
+#ENV HOSTNAME dockerdns
   
 # locale to german
-ENV LANG=de_DE.ISO-8859-1
-ENV LANGUAGE de_DE:de
-ENV LC_ALL de_DE.ISO-8859-1
+#ENV LANG=de_DE.ISO-8859-1
+#ENV LANGUAGE de_DE:de
+#ENV LC_ALL de_DE.ISO-8859-1
 
-ENV TZ Europe/Berlin
+#ENV TZ Europe/Berlin
 
 EXPOSE 53
 EXPOSE 80
 EXPOSE 9092
 
-RUN apt-get update && \
-apt-get install -y --no-install-recommends \
-openjdk-11-jre \
-bind9 \
-bind9utils \
-bind9-doc
+#RUN apt-get update && \
+#apt-get install -y --no-install-recommends \
+#openjdk-11-jre \
+#bind9 \
+#bind9utils \
+#bind9-doc
   # Prints installed java version, just for checking
-RUN java --version
+#RUN java --version
 
 
 # add h2 database to root folder
@@ -32,6 +33,6 @@ ADD https://github.com/demogitjava/demodatabase/raw/master/demodb.mv.db /root/de
 ADD https://github.com/demogitjava/demodatabase/raw/master/dockerdnsserver-0.0.1-SNAPSHOT.jar /root/dockerdnsserver.jar
 
 #COPY target/dockerdnsserver.jar dockerdnsserver.jar
-ENTRYPOINT ["java", "-jar", "/root/dockerdnsserver.jar"]
+#ENTRYPOINT ["java", "-jar", "/root/dockerdnsserver.jar"]
 
 
